@@ -53,7 +53,10 @@ public class Point3f {
 		this.boundary = boundary;
 		
 	}
-
+	
+	public Point3f playerDirectionVector(Point3f p) {
+		return new Point3f(this.getX()-p.getX(), p.getY()-this.getY(), this.getZ()-p.getZ());
+	}
 	// sometimes for different algorithms we will need to address the point using positions 0 1 2 
 	public float getPostion(int postion)
 	{
