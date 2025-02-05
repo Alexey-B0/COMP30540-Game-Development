@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +49,8 @@ public class MainWindow {
 	 private static  JFrame frame = new JFrame("Game");   // Change to the name of your game 
 	 private static   Model gameworld= new Model();
 	 private static   Viewer canvas = new  Viewer( gameworld);
-	 private KeyListener Controller =new Controller()  ; 
+	 private KeyListener KeyController =new Controller()  ; 
+	 private MouseListener MouseController = new Controller();
 	 private static   int TargetFPS = 100;
 	 private static boolean startGame= false; 
 	 private   JLabel BackgroundImageForStartMenu ;
@@ -71,7 +73,8 @@ public class MainWindow {
 					startMenuButton.setVisible(false);
 					BackgroundImageForStartMenu.setVisible(false); 
 					canvas.setVisible(true); 
-					canvas.addKeyListener(Controller);    //adding the controller to the Canvas  
+					canvas.addKeyListener(KeyController);    //adding the controller to the Canvas
+					canvas.addMouseListener(MouseController);
 	            canvas.requestFocusInWindow();   // making sure that the Canvas is in focus so keyboard input will be taking in .
 					startGame=true;
 				}});  

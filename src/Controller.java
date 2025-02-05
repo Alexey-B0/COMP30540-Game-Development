@@ -1,7 +1,11 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import util.Point3f;
 
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -29,13 +33,15 @@ SOFTWARE.
  */ 
 
 //Singeton pattern
-public class Controller implements KeyListener {
+public class Controller implements KeyListener, MouseListener {
         
 	   private static boolean KeyAPressed= false;
 	   private static boolean KeySPressed= false;
 	   private static boolean KeyDPressed= false;
 	   private static boolean KeyWPressed= false;
 	   private static boolean KeySpacePressed= false;
+	   private static boolean MousePressed = false;
+	   private static Point3f MousePosition = new Point3f(0,0,0);
 	   
 	   private static final Controller instance = new Controller();
 	   
@@ -139,6 +145,54 @@ public class Controller implements KeyListener {
 		KeySpacePressed = keySpacePressed;
 	} 
 	
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
+		setMousePressed(true);
+		setMousePosition(new Point3f(x, y, 0));
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// setMousePosition(new Point3f(0, 0, 0));
+		// setMousePressed(false);
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// only mouseClicked needed
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// only mouseClicked needed
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// int x = e.getX();
+		// int y = e.getY();
+		// setMousePressed(true);
+		// setMousePosition(new Point3f(x, y, 0));
+	}
+
+	public void setMousePosition(Point3f mousePosition) {
+		MousePosition = mousePosition;
+	}
+
+	public Point3f getMousePosition() {
+		return MousePosition;
+	}
+
+	public boolean isMousePressed() {
+		return MousePressed;
+	}
+
+	public void setMousePressed(boolean mousePressed) {
+		MousePressed = mousePressed;
+	}
 	 
 }
 

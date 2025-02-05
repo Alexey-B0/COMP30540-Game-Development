@@ -36,6 +36,7 @@ public class Model {
 	private Controller controller = Controller.getInstance();
 	private CopyOnWriteArrayList<GameObject> EnemiesList = new CopyOnWriteArrayList<GameObject>();
 	private CopyOnWriteArrayList<GameObject> BulletList = new CopyOnWriteArrayList<GameObject>();
+	private CopyOnWriteArrayList<Vector3f> BulletVectorList = new CopyOnWriteArrayList<Vector3f>();
 	private int Score = 0;
 
 	public Model() {
@@ -73,11 +74,12 @@ public class Model {
 		// using enhanced for-loop style as it makes it alot easier both code wise and
 		// reading wise too
 		for (GameObject temp : EnemiesList) {
-			for (GameObject Bullet : BulletList) {
-				if (Math.abs(temp.getCentre().getX() - Bullet.getCentre().getX()) < temp.getWidth()
-						&& Math.abs(temp.getCentre().getY() - Bullet.getCentre().getY()) < temp.getHeight()) {
+			for (int i = 0; i < BulletList.size(); i++) {
+				if (Math.abs(temp.getCentre().getX() - BulletList.get(i).getCentre().getX()) < temp.getWidth()
+						&& Math.abs(temp.getCentre().getY() - BulletList.get(i).getCentre().getY()) < temp.getHeight()) {
 					EnemiesList.remove(temp);
-					BulletList.remove(Bullet);
+					BulletList.remove(BulletList.get(i));
+					BulletVectorList.remove(BulletVectorList.get(i));
 					Score++;
 				}
 			}
@@ -91,7 +93,7 @@ public class Model {
 			// Move enemies
 
 			Point3f towardsPlayer = Player.getCentre().playerDirectionVector(temp.getCentre());
-			temp.getCentre().ApplyVector(new Vector3f(towardsPlayer.getX(), towardsPlayer.getY(), 0).Normal().byScalar(2));
+			temp.getCentre().ApplyVector(new Vector3f(towardsPlayer.getX(), towardsPlayer.getY(), 0).Normal());
 
 			// see if they get to the top of the screen ( remember 0 is the top
 			if (temp.getCentre().getY() == 900.0f) // current boundary need to pass value to model
@@ -115,15 +117,25 @@ public class Model {
 		// TODO Auto-generated method stub
 		// move bullets
 
-		for (GameObject temp : BulletList) {
-			// check to move them
+		// for (GameObject temp : BulletList) {
+		// 	// check to move them
 
-			temp.getCentre().ApplyVector(new Vector3f(0, 1, 0));
-			// see if they hit anything
+		// 	temp.getCentre().ApplyVector(new Vector3f(0, 1, 0));
+		// 	// see if they hit anything
 
-			// see if they get to the top of the screen ( remember 0 is the top
-			if (temp.getCentre().getY() == 0) {
-				BulletList.remove(temp);
+		// 	// see if they get to the top of the screen ( remember 0 is the top
+		// 	if (temp.getCentre().getY() == 0) {
+		// 		BulletList.remove(temp);
+		// 	}
+		// }
+
+		for (int i = 0; i < BulletList.size(); i++) {
+			BulletList.get(i).getCentre().ApplyVector(BulletVectorList.get(i).byScalar(2));
+
+			if (BulletList.get(i).getCentre().getY() == 0 || BulletList.get(i).getCentre().getX() == 0
+			|| BulletList.get(i).getCentre().getX() == 900 || BulletList.get(i).getCentre().getY() == 900) {
+				BulletList.remove(BulletList.get(i));
+				BulletVectorList.remove(BulletVectorList.get(i));
 			}
 		}
 
@@ -152,17 +164,24 @@ public class Model {
 			Player.getCentre().ApplyVector(new Vector3f(0, -2, 0));
 		}
 
-		if (Controller.getInstance().isKeySpacePressed()) {
+		if (Controller.getInstance().isMousePressed()) {
 			CreateBullet();
-			Controller.getInstance().setKeySpacePressed(false);
+			Controller.getInstance().setMousePressed(false);
 		}
 
 	}
 
 	private void CreateBullet() {
-		BulletList.add(new GameObject("res/Bullet.png", 32, 64,
-				new Point3f(Player.getCentre().getX(), Player.getCentre().getY(), 0.0f)));
+		GameObject Bullet = new GameObject("res/Bullet.png", 32, 64,
+		new Point3f(Player.getCentre().getX(), Player.getCentre().getY(), 0.0f));
+		
+		BulletList.add(Bullet);
+		Point3f mousePosition = Controller.getInstance().getMousePosition();
 
+		Vector3f BulletVector = new Vector3f(mousePosition.getX() - Bullet.getCentre().getX(),
+				Bullet.getCentre().getY() - mousePosition.getY(), 0).Normal();
+		
+		BulletVectorList.add(BulletVector);
 	}
 
 	public GameObject getPlayer() {

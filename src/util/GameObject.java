@@ -26,6 +26,7 @@ SOFTWARE.
 public class GameObject {
 	
 	private Point3f centre= new Point3f(0,0,0);			// Centre of object, using 3D as objects may be scaled  
+	private Vector3f directionalVector = new Vector3f(0, 0, 0); // Directional vector of object
 	private int width=10;
 	private int height=10;
 	private boolean hasTextured=false;
@@ -42,6 +43,24 @@ public class GameObject {
     	 this.width=width;
 		 this.height=height;
 		 this.centre =centre;
+		 this.directionalVector = new Vector3f(0, 0, 0);
+	}
+
+	public GameObject(String textureLocation, int width, int height, Point3f centre, Vector3f directionalVector) {
+		hasTextured=true;
+		this.textureLocation=textureLocation;
+		this.width=width;
+		this.height=height;
+		this.centre =centre;
+		this.directionalVector = directionalVector;
+	}
+
+	public void setDirectionalVector(Vector3f directionalVector) {
+		this.directionalVector = directionalVector;
+	}
+
+	public Vector3f getDirectionalVector() {
+		return directionalVector;
 	}
 
 	public Point3f getCentre() {
