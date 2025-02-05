@@ -36,7 +36,6 @@ public class Model {
 	private Controller controller = Controller.getInstance();
 	private CopyOnWriteArrayList<GameObject> EnemiesList = new CopyOnWriteArrayList<GameObject>();
 	private CopyOnWriteArrayList<GameObject> BulletList = new CopyOnWriteArrayList<GameObject>();
-	private CopyOnWriteArrayList<Vector3f> BulletVectorList = new CopyOnWriteArrayList<Vector3f>();
 	private int Score = 0;
 
 	public Model() {
@@ -74,12 +73,11 @@ public class Model {
 		// using enhanced for-loop style as it makes it alot easier both code wise and
 		// reading wise too
 		for (GameObject temp : EnemiesList) {
-			for (int i = 0; i < BulletList.size(); i++) {
-				if (Math.abs(temp.getCentre().getX() - BulletList.get(i).getCentre().getX()) < temp.getWidth()
-						&& Math.abs(temp.getCentre().getY() - BulletList.get(i).getCentre().getY()) < temp.getHeight()) {
+			for (GameObject Bullet : BulletList) {
+				if (Math.abs(temp.getCentre().getX() - Bullet.getCentre().getX()) < temp.getWidth()
+						&& Math.abs(temp.getCentre().getY() - Bullet.getCentre().getY()) < temp.getHeight()) {
 					EnemiesList.remove(temp);
-					BulletList.remove(BulletList.get(i));
-					BulletVectorList.remove(BulletVectorList.get(i));
+					BulletList.remove(Bullet);
 					Score++;
 				}
 			}
@@ -129,13 +127,12 @@ public class Model {
 		// 	}
 		// }
 
-		for (int i = 0; i < BulletList.size(); i++) {
-			BulletList.get(i).getCentre().ApplyVector(BulletVectorList.get(i).byScalar(2));
+		for (GameObject Bullet : BulletList) {
+			Bullet.getCentre().ApplyVector(Bullet.getDirectionalVector().byScalar(2));
 
-			if (BulletList.get(i).getCentre().getY() == 0 || BulletList.get(i).getCentre().getX() == 0
-			|| BulletList.get(i).getCentre().getX() == 900 || BulletList.get(i).getCentre().getY() == 900) {
-				BulletList.remove(BulletList.get(i));
-				BulletVectorList.remove(BulletVectorList.get(i));
+			if (Bullet.getCentre().getY() == 0 || Bullet.getCentre().getX() == 0
+			|| Bullet.getCentre().getX() == 900 || Bullet.getCentre().getY() == 900) {
+				BulletList.remove(Bullet);
 			}
 		}
 
@@ -172,16 +169,15 @@ public class Model {
 	}
 
 	private void CreateBullet() {
+		Point3f mousePosition = Controller.getInstance().getMousePosition();
+		Vector3f BulletVector = new Vector3f(mousePosition.getX() - Player.getCentre().getX(),
+				Player.getCentre().getY() - mousePosition.getY(), 0).Normal();
+		
 		GameObject Bullet = new GameObject("res/Bullet.png", 32, 64,
-		new Point3f(Player.getCentre().getX(), Player.getCentre().getY(), 0.0f));
+		new Point3f(Player.getCentre().getX(), Player.getCentre().getY(), 0.0f), BulletVector);
+		
 		
 		BulletList.add(Bullet);
-		Point3f mousePosition = Controller.getInstance().getMousePosition();
-
-		Vector3f BulletVector = new Vector3f(mousePosition.getX() - Bullet.getCentre().getX(),
-				Bullet.getCentre().getY() - mousePosition.getY(), 0).Normal();
-		
-		BulletVectorList.add(BulletVector);
 	}
 
 	public GameObject getPlayer() {
