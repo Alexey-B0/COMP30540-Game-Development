@@ -44,10 +44,17 @@ public class Model {
 		Player = new GameObject("res/Lightning.png", 50, 50, new Point3f(500, 500, 0));
 		// Enemies starting with four
 
-		EnemiesList.add(new GameObject("res/UFO.png", 50, 50, new Point3f(((float) Math.random() * 50 + 400), 0, 0)));
-		EnemiesList.add(new GameObject("res/UFO.png", 50, 50, new Point3f(((float) Math.random() * 50 + 500), 0, 0)));
-		EnemiesList.add(new GameObject("res/UFO.png", 50, 50, new Point3f(((float) Math.random() * 100 + 500), 0, 0)));
-		EnemiesList.add(new GameObject("res/UFO.png", 50, 50, new Point3f(((float) Math.random() * 100 + 400), 0, 0)));
+		EnemiesList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
+		((float) Math.random() * 50 + 400), 0), new Vector3f(-1, 0, 0)));
+
+		EnemiesList.add(new GameObject("res/walk_left.png",50, 50, new Point3f(((float) Math.random() * 50 + 900),
+		((float) Math.random() * 50 + 500), 0), new Vector3f(-1, 0, 0)));
+
+		EnemiesList.add(new GameObject("res/walk_right.png",50, 50, new Point3f(((float) Math.random() * 50 - 50),
+		((float) Math.random() * 100 + 500), 0), new Vector3f(1, 0, 0)));
+
+		EnemiesList.add(new GameObject("res/walk_right.png",50, 50, new Point3f(((float) Math.random() * 50 - 50),
+		((float) Math.random() * 100 + 400), 0), new Vector3f(1, 0, 0)));
 
 	}
 
@@ -116,22 +123,22 @@ public class Model {
 		// move bullets
 
 		// for (GameObject temp : BulletList) {
-		// 	// check to move them
+		// // check to move them
 
-		// 	temp.getCentre().ApplyVector(new Vector3f(0, 1, 0));
-		// 	// see if they hit anything
+		// temp.getCentre().ApplyVector(new Vector3f(0, 1, 0));
+		// // see if they hit anything
 
-		// 	// see if they get to the top of the screen ( remember 0 is the top
-		// 	if (temp.getCentre().getY() == 0) {
-		// 		BulletList.remove(temp);
-		// 	}
+		// // see if they get to the top of the screen ( remember 0 is the top
+		// if (temp.getCentre().getY() == 0) {
+		// BulletList.remove(temp);
+		// }
 		// }
 
 		for (GameObject Bullet : BulletList) {
 			Bullet.getCentre().ApplyVector(Bullet.getDirectionalVector().byScalar(2));
 
 			if (Bullet.getCentre().getY() == 0 || Bullet.getCentre().getX() == 0
-			|| Bullet.getCentre().getX() == 900 || Bullet.getCentre().getY() == 900) {
+					|| Bullet.getCentre().getX() == 900 || Bullet.getCentre().getY() == 900) {
 				BulletList.remove(Bullet);
 			}
 		}
@@ -172,11 +179,10 @@ public class Model {
 		Point3f mousePosition = Controller.getInstance().getMousePosition();
 		Vector3f BulletVector = new Vector3f(mousePosition.getX() - Player.getCentre().getX(),
 				Player.getCentre().getY() - mousePosition.getY(), 0).Normal();
-		
+
 		GameObject Bullet = new GameObject("res/Bullet.png", 32, 64,
-		new Point3f(Player.getCentre().getX(), Player.getCentre().getY(), 0.0f), BulletVector);
-		
-		
+				new Point3f(Player.getCentre().getX(), Player.getCentre().getY(), 0.0f), BulletVector);
+
 		BulletList.add(Bullet);
 	}
 
