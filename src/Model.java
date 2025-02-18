@@ -38,6 +38,8 @@ public class Model {
 	private CopyOnWriteArrayList<GameObject> BulletList = new CopyOnWriteArrayList<GameObject>();
 	private int Score = 0;
 
+	static Random random = new Random();
+
 	public Model() {
 		// setup game world
 		// Player
@@ -97,26 +99,41 @@ public class Model {
 		for (GameObject temp : EnemiesList) {
 			// Move enemies
 
-			Point3f towardsPlayer = Player.getCentre().playerDirectionVector(temp.getCentre());
-			temp.getCentre().ApplyVector(new Vector3f(towardsPlayer.getX(), towardsPlayer.getY(), 0).Normal());
+			// Point3f towardsPlayer = Player.getCentre().playerDirectionVector(temp.getCentre());
+			temp.getCentre().ApplyVector(temp.getDirectionalVector());
+
+			if ((temp.getDirectionalVector().getX() > 0 && temp.getCentre().getX() == 900)
+			|| (temp.getDirectionalVector().getX() < 0 && temp.getCentre().getX() == 0)) {
+				EnemiesList.remove(temp);
+			}
 
 			// see if they get to the top of the screen ( remember 0 is the top
-			if (temp.getCentre().getY() == 900.0f) // current boundary need to pass value to model
-			{
-				EnemiesList.remove(temp);
+			// if (temp.getCentre().getY() == 900.0f) // current boundary need to pass value to model
+			// {
+			// 	EnemiesList.remove(temp);
 
-				// enemies win so score decreased
-				Score--;
-			}
+			// 	// enemies win so score decreased
+			// 	Score--;
+			// }
 		}
 
 		if (EnemiesList.size() < 2) {
 			while (EnemiesList.size() < 6) {
 				EnemiesList
-						.add(new GameObject("res/UFO.png", 50, 50, new Point3f(((float) Math.random() * 1000), 0, 0)));
+						.add(spawnEnemy());
 			}
 		}
 	}
+
+	public GameObject spawnEnemy() {
+        boolean spawnLeft = random.nextBoolean(); // Randomly choose left (true) or right (false)
+        float xPos = spawnLeft ? (float) (Math.random() * 50) : (float) (900 - Math.random() * 50);
+        Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
+        String texture = spawnLeft ? "res/walk_right.png" : "res/walk_left.png";
+
+        return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 50 + 400), 0), direction);
+        //EnemiesList.add(enemy);
+    }
 
 	private void bulletLogic() {
 		// TODO Auto-generated method stub
