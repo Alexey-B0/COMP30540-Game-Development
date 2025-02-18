@@ -41,7 +41,7 @@ public class Model {
 	public Model() {
 		// setup game world
 		// Player
-		Player = new GameObject("res/Lightning.png", 50, 50, new Point3f(500, 500, 0));
+		Player = new GameObject("res/itemsfishinga.png", 50, 50, new Point3f(500, 500, 0));
 		// Enemies starting with four
 
 		EnemiesList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
