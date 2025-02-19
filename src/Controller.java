@@ -53,7 +53,13 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 	 public static Controller getInstance(){
 	        return instance;
 	    }
-	   
+
+	
+	  
+	/*
+	* vvvvvvvv Keyboard input implementations below vvvvvvv
+	*/	
+
 	@Override
 	// Key pressed , will keep triggering 
 	public void keyTyped(KeyEvent e) { 
@@ -146,7 +152,14 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 	public void setKeySpacePressed(boolean keySpacePressed) {
 		KeySpacePressed = keySpacePressed;
 	} 
+
+	/*
+	 * ^^^^^^^^ Keyboard input implementations above ^^^^^^^^ 
+	 */
 	
+	/*
+	 * vvvvvvvv Mouse input implementations below vvvvvvv
+	 */
 
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -173,15 +186,33 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// int x = e.getX();
-		// int y = e.getY();
-		// setMousePressed(true);
-		// setMousePosition(new Point3f(x, y, 0));
+		// only mousePressed needed
 	}
 
 	public void setMousePosition(Point3f mousePosition) {
 		MousePosition = mousePosition;
 	}
+
+	public Point3f getMousePosition() {
+		return MousePosition;
+	}
+
+	public void setMousePressed(boolean mousePressed) {
+		MousePressed = mousePressed;
+	}
+
+	public boolean isMousePressed() {
+		return MousePressed;
+	}
+
+
+	/*
+	 * ^^^^^^^^ Mouse input implementations above ^^^^^^^^
+	 */
+
+	/*
+	 * vvvvvvvv MouseMotion input implementations below vvvvvvv
+	 */
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
@@ -196,26 +227,18 @@ public class Controller implements KeyListener, MouseListener, MouseMotionListen
 		setMouseCurrLocation(new Point3f(x, y, 0));
 	}
 
-	public Point3f getMouseCurrLocation() {
-		return MouseCurrLocation;
-	}
-
-	public Point3f getMousePosition() {
-		return MousePosition;
-	}
-
-	public boolean isMousePressed() {
-		return MousePressed;
-	}
-
 	public void setMouseCurrLocation(Point3f mouseCurrLocation) {
 		MouseCurrLocation = mouseCurrLocation;
 	}
 
-	public void setMousePressed(boolean mousePressed) {
-		MousePressed = mousePressed;
+	public Point3f getMouseCurrLocation() {
+		return MouseCurrLocation;
 	}
-	 
+
+	/*
+	 * ^^^^^^^^ MouseMotion input implementations above ^^^^^^^^
+	 */
+
 }
 
 /*
