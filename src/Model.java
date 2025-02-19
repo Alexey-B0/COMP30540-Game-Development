@@ -190,6 +190,10 @@ public class Model {
 			Controller.getInstance().setMousePressed(false);
 		}
 
+		if(Controller.getInstance().getMouseCurrLocation().getY() != Player.getCentre().getY()) {
+			Player.getCentre().setY(Controller.getInstance().getMouseCurrLocation().getY());
+		}
+
 	}
 
 	private void CreateBullet() {

@@ -2,6 +2,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -33,7 +34,7 @@ SOFTWARE.
  */ 
 
 //Singeton pattern
-public class Controller implements KeyListener, MouseListener {
+public class Controller implements KeyListener, MouseListener, MouseMotionListener {
         
 	   private static boolean KeyAPressed= false;
 	   private static boolean KeySPressed= false;
@@ -41,6 +42,7 @@ public class Controller implements KeyListener, MouseListener {
 	   private static boolean KeyWPressed= false;
 	   private static boolean KeySpacePressed= false;
 	   private static boolean MousePressed = false;
+	   private static Point3f MouseCurrLocation = new Point3f(0,0,0);
 	   private static Point3f MousePosition = new Point3f(0,0,0);
 	   
 	   private static final Controller instance = new Controller();
@@ -156,18 +158,17 @@ public class Controller implements KeyListener, MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// setMousePosition(new Point3f(0, 0, 0));
-		// setMousePressed(false);
+		// only mousePressed needed
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// only mouseClicked needed
+		// only mousePressed needed
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// only mouseClicked needed
+		// only mousePressed needed
 	}
 
 	@Override
@@ -182,12 +183,33 @@ public class Controller implements KeyListener, MouseListener {
 		MousePosition = mousePosition;
 	}
 
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// only mouseMoved needed
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
+
+		setMouseCurrLocation(new Point3f(x, y, 0));
+	}
+
+	public Point3f getMouseCurrLocation() {
+		return MouseCurrLocation;
+	}
+
 	public Point3f getMousePosition() {
 		return MousePosition;
 	}
 
 	public boolean isMousePressed() {
 		return MousePressed;
+	}
+
+	public void setMouseCurrLocation(Point3f mouseCurrLocation) {
+		MouseCurrLocation = mouseCurrLocation;
 	}
 
 	public void setMousePressed(boolean mousePressed) {

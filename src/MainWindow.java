@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -49,18 +50,17 @@ public class MainWindow {
 	 private static  JFrame frame = new JFrame("Game");   // Change to the name of your game 
 	 private static   Model gameworld= new Model();
 	 private static   Viewer canvas = new  Viewer( gameworld);
-	 private KeyListener KeyController =new Controller()  ; 
-	 private MouseListener MouseController = new Controller();
+	 private KeyListener KeyController =new Controller();
 	 private static   int TargetFPS = 100;
 	 private static boolean startGame= false; 
 	 private   JLabel BackgroundImageForStartMenu ;
 	  
 	public MainWindow() {
-	        frame.setSize(1024, 1024);  // you can customise this later and adapt it to change on size.  
+	        frame.setSize(1000, 1000);  // you can customise this later and adapt it to change on size.  
 	      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //If exit // you can modify with your way of quitting , just is a template.
 	        frame.setLayout(null);
 	        frame.add(canvas);  
-	        canvas.setBounds(0, 0, 1024, 1024); 
+	        canvas.setBounds(0, 0, 1000, 1000); 
 			   canvas.setBackground(new Color(255,255,255)); //white background  replaced by Space background but if you remove the background method this will draw a white screen 
 		      canvas.setVisible(false);   // this will become visible after you press the key. 
 		          
@@ -74,7 +74,8 @@ public class MainWindow {
 					BackgroundImageForStartMenu.setVisible(false); 
 					canvas.setVisible(true); 
 					canvas.addKeyListener(KeyController);    //adding the controller to the Canvas
-					canvas.addMouseListener(MouseController);
+					canvas.addMouseListener((MouseListener) KeyController);
+					canvas.addMouseMotionListener((MouseMotionListener) KeyController);
 	            canvas.requestFocusInWindow();   // making sure that the Canvas is in focus so keyboard input will be taking in .
 					startGame=true;
 				}});  
