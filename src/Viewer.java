@@ -49,14 +49,20 @@ public class Viewer extends JPanel {
 	Model gameworld =new Model(); 
 
 	File BackroundToLoad = new File("res/lakehouse.png");
+	File fishSpriteRight = new File("res/walk_right.png");
+	File fishSpriteLeft = new File("res/walk_left.png");
 
-	Image myImage;
+	Image myBackground;
+	Image fishRight;
+	Image fishLeft;
 	 
 	public Viewer(Model World) {
 		this.gameworld=World;
 		
 		try {
-			myImage = ImageIO.read(BackroundToLoad);
+			myBackground = ImageIO.read(BackroundToLoad);
+			fishRight = ImageIO.read(fishSpriteRight);
+			fishLeft = ImageIO.read(fishSpriteLeft);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -142,25 +148,18 @@ public class Viewer extends JPanel {
 	}
 
 	private void drawFish(int x, int y, int width, int height, String texture, Graphics g) {
-		File TextureToLoad = new File(texture);  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
-		try {
 			int animationSpeed = 10;
-			Image myImage = ImageIO.read(TextureToLoad);
+			Image myImage = texture == "res/walk_left.png" ? fishLeft: fishRight;
 			//The spirte is 32x32 pixel wide and 4 of them are placed together so we need to grab a different one each time 
 			//remember your training :-) computer science everything starts at 0 so 32 pixels gets us to 31  
 			int currentPositionInAnimation= ((int) ((CurrentAnimationTime / animationSpeed) % 4) * 48); //slows down animation so every 10 frames we get another frame so every 100ms 
 			g.drawImage(myImage, x,y, x+width, y+height, currentPositionInAnimation  , 0, currentPositionInAnimation+47, 48, null); 
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
 		
 	}
 
 	private void drawBackground(Graphics g)
 	{
-		g.drawImage(myImage, 0,0, 1024, 1024, 0 , 0, 1024, 1024, null); 
+		g.drawImage(myBackground, 0,0, 1024, 1024, 0 , 0, 1024, 1024, null); 
 	}
 	
 	private void drawBullet(int x, int y, int width, int height, String texture,Graphics g)

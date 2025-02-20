@@ -40,6 +40,9 @@ public class Model {
 	private int Score = 0;
 	private int Lives = 3;
 
+	private long lastFishSpawnTime = 0;
+	private final long FISH_SPAWN_INTERVAL = 500;
+
 	static Random random = new Random();
 
 	public Model() {
@@ -52,7 +55,7 @@ public class Model {
 		// Player Logic first
 		playerLogic();
 		// Enemy Logic next
-		enemyLogic();
+		fishLogic();
 		// Bullets move next
 		bulletLogic();
 		// interactions between objects
@@ -90,33 +93,32 @@ public class Model {
 
 	}
 
-	private void enemyLogic() {
+	private void fishLogic() {
 		// TODO Auto-generated method stub
 		for (GameObject temp : FishList) {
 			// Move enemies
 			temp.getCentre().ApplyVector(temp.getDirectionalVector());
 
-			if ((temp.getDirectionalVector().getX() > 0 && temp.getCentre().getX() == 900)
-					|| (temp.getDirectionalVector().getX() < 0 && temp.getCentre().getX() == 0)) {
+			if ((temp.getDirectionalVector().getX() > 0 && temp.getCentre().getX() >= 900)
+					|| (temp.getDirectionalVector().getX() < 0 && temp.getCentre().getX() <= 0)) {
 				FishList.remove(temp);
 			}
 		}
 
-		if (FishList.size() < 2) {
-			while (FishList.size() < 6) {
-				FishList.add(spawnEnemy());
-			}
+		long now = System.currentTimeMillis();
+		if (FishList.size() < 20 && (now - lastFishSpawnTime) >= FISH_SPAWN_INTERVAL) {
+				FishList.add(spawnFish());
+				lastFishSpawnTime = now;
 		}
 	}
 
-	public GameObject spawnEnemy() {
+	public GameObject spawnFish() {
 		boolean spawnLeft = random.nextBoolean(); // Randomly choose left (true) or right (false)
 		float xPos = spawnLeft ? (float) (Math.random() * 50) : (float) (900 - Math.random() * 50);
 		Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
 		String texture = spawnLeft ? "res/walk_right.png" : "res/walk_left.png";
 
-		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 500 + 200), 0), direction);
-		// EnemiesList.add(enemy);
+		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 400 + 200), 0), direction);
 	}
 
 	private void bulletLogic() {
@@ -139,7 +141,7 @@ public class Model {
 			Bullet.getCentre().ApplyVector(Bullet.getDirectionalVector().byScalar(2));
 
 			if (Bullet.getCentre().getY() == 0 || Bullet.getCentre().getX() == 0
-					|| Bullet.getCentre().getX() == 900 || Bullet.getCentre().getY() == 900) {
+					|| Bullet.getCentre().getX() == 900 || Bullet.getCentre().getY() >= 600) {
 				BulletList.remove(Bullet);
 			}
 		}
@@ -232,22 +234,6 @@ public class Model {
 		EnemiesList.clear();
 		BulletList.clear();
 		Player = new GameObject("res/itemsfishinga.png", 50, 50, new Point3f(500, 500, 0));
-		// setup game world
-		// Player
-		// Enemies starting with four
-
-		FishList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
-				((float) Math.random() * 50 + 400), 0), new Vector3f(-1, 0, 0)));
-
-		FishList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
-				((float) Math.random() * 50 + 500), 0), new Vector3f(-1, 0, 0)));
-
-		FishList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
-				((float) Math.random() * 100 + 500), 0), new Vector3f(1, 0, 0)));
-
-		FishList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
-				((float) Math.random() * 100 + 400), 0), new Vector3f(1, 0, 0)));
-
 		resetScore();
 	}
 
