@@ -48,6 +48,13 @@ public class Point3f {
 		this.setY(y);
 		this.setZ(z); 
 	}
+
+	public Point3f(float x, float y, float z, int boundary) {
+		this.setX(x);
+		this.setY(y);
+		this.setZ(z);
+		this.setBoundary(boundary);
+	}
 	
 	private void setBoundary(int boundary) {
 		this.boundary = boundary;

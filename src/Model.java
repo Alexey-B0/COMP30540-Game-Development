@@ -45,6 +45,7 @@ public class Model {
 
 	private long lastFishSpawnTime = 0;
 	private final long FISH_SPAWN_INTERVAL = 500;
+	private final int FISH_SPEED = 5;
 
 	static Random random = new Random();
 
@@ -123,7 +124,7 @@ public class Model {
 		Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
 		String texture = spawnLeft ? "res/walk_right.png" : "res/walk_left.png";
 
-		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 400 + 200), 0), direction);
+		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 400 + 200), 0, getScreenWidth()), direction.byScalar(FISH_SPEED));
 	}
 
 	private void bulletLogic() {
