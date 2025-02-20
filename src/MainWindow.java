@@ -142,10 +142,11 @@ public class MainWindow {
 		// So no need to call it explicitly 
 		
 		// model update   
-		gameworld.gamelogic();
+		gameworld.gamelogic(frame.getSize());
 		// view update 
 		
 		  canvas.updateview(); 
+		  canvas.setSize(frame.getSize());
 		
 		// Both these calls could be setup as  a thread but we want to simplify the game logic for you.  
 		//score update  

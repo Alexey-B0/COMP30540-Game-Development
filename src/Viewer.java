@@ -159,7 +159,7 @@ public class Viewer extends JPanel {
 
 	private void drawBackground(Graphics g)
 	{
-		g.drawImage(myBackground, 0,0, 1024, 1024, 0 , 0, 1024, 1024, null); 
+		g.drawImage(myBackground, 0,0, this.getWidth(), this.getHeight(), 0 , 0, 1024, 1024, null); 
 	}
 	
 	private void drawBullet(int x, int y, int width, int height, String texture,Graphics g)

@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -39,6 +40,8 @@ public class Model {
 	private CopyOnWriteArrayList<GameObject> BulletList = new CopyOnWriteArrayList<GameObject>();
 	private int Score = 0;
 	private int Lives = 3;
+	private int screenWidth = 0;
+	private int screenHeight = 0;
 
 	private long lastFishSpawnTime = 0;
 	private final long FISH_SPAWN_INTERVAL = 500;
@@ -51,7 +54,9 @@ public class Model {
 
 	// This is the heart of the game , where the model takes in all the inputs
 	// ,decides the outcomes and then changes the model accordingly.
-	public void gamelogic() {
+	public void gamelogic(Dimension size) {
+		setScreenWidth((int)size.getWidth());
+		setScreenHeight((int)size.getHeight());
 		// Player Logic first
 		playerLogic();
 		// Enemy Logic next
@@ -114,7 +119,7 @@ public class Model {
 
 	public GameObject spawnFish() {
 		boolean spawnLeft = random.nextBoolean(); // Randomly choose left (true) or right (false)
-		float xPos = spawnLeft ? (float) (Math.random() * 50) : (float) (900 - Math.random() * 50);
+		float xPos = spawnLeft ? (float) (Math.random() * 50) : (float) (getScreenWidth() - Math.random() * 50);
 		Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
 		String texture = spawnLeft ? "res/walk_right.png" : "res/walk_left.png";
 
@@ -227,6 +232,22 @@ public class Model {
 
 	public void resetScore() {
 		setScore(0);
+	}
+
+	public int getScreenWidth() {
+		return screenWidth;
+	}
+
+	public void setScreenWidth(int screenWidth) {
+		this.screenWidth = screenWidth;
+	}
+
+	public int getScreenHeight() {
+		return screenHeight;
+	}
+
+	public void setScreenHeight(int screenHeight) {
+		this.screenHeight = screenHeight;
 	}
 
 	public void setup() {
