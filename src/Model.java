@@ -47,16 +47,16 @@ public class Model {
 		// Enemies starting with four
 
 		EnemiesList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
-		((float) Math.random() * 50 + 400), 0), new Vector3f(-1, 0, 0)));
+				((float) Math.random() * 50 + 400), 0), new Vector3f(-1, 0, 0)));
 
-		EnemiesList.add(new GameObject("res/walk_left.png",50, 50, new Point3f(((float) Math.random() * 50 + 900),
-		((float) Math.random() * 50 + 500), 0), new Vector3f(-1, 0, 0)));
+		EnemiesList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
+				((float) Math.random() * 50 + 500), 0), new Vector3f(-1, 0, 0)));
 
-		EnemiesList.add(new GameObject("res/walk_right.png",50, 50, new Point3f(((float) Math.random() * 50 - 50),
-		((float) Math.random() * 100 + 500), 0), new Vector3f(1, 0, 0)));
+		EnemiesList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
+				((float) Math.random() * 100 + 500), 0), new Vector3f(1, 0, 0)));
 
-		EnemiesList.add(new GameObject("res/walk_right.png",50, 50, new Point3f(((float) Math.random() * 50 - 50),
-		((float) Math.random() * 100 + 400), 0), new Vector3f(1, 0, 0)));
+		EnemiesList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
+				((float) Math.random() * 100 + 400), 0), new Vector3f(1, 0, 0)));
 
 	}
 
@@ -81,14 +81,24 @@ public class Model {
 		// see if they hit anything
 		// using enhanced for-loop style as it makes it alot easier both code wise and
 		// reading wise too
+		// for (GameObject temp : EnemiesList) {
+		// for (GameObject Bullet : BulletList) {
+		// if (Math.abs(temp.getCentre().getX() - Bullet.getCentre().getX()) <
+		// temp.getWidth()
+		// && Math.abs(temp.getCentre().getY() - Bullet.getCentre().getY()) <
+		// temp.getHeight()) {
+		// EnemiesList.remove(temp);
+		// BulletList.remove(Bullet);
+		// Score++;
+		// }
+		// }
+		// }
+
 		for (GameObject temp : EnemiesList) {
-			for (GameObject Bullet : BulletList) {
-				if (Math.abs(temp.getCentre().getX() - Bullet.getCentre().getX()) < temp.getWidth()
-						&& Math.abs(temp.getCentre().getY() - Bullet.getCentre().getY()) < temp.getHeight()) {
-					EnemiesList.remove(temp);
-					BulletList.remove(Bullet);
-					Score++;
-				}
+			if (Math.abs(temp.getCentre().getX() - Player.getCentre().getX()) < temp.getWidth()
+					&& Math.abs(temp.getCentre().getY() - Player.getCentre().getY()) < temp.getHeight()) {
+				EnemiesList.remove(temp);
+				Score++;
 			}
 		}
 
@@ -99,21 +109,23 @@ public class Model {
 		for (GameObject temp : EnemiesList) {
 			// Move enemies
 
-			// Point3f towardsPlayer = Player.getCentre().playerDirectionVector(temp.getCentre());
+			// Point3f towardsPlayer =
+			// Player.getCentre().playerDirectionVector(temp.getCentre());
 			temp.getCentre().ApplyVector(temp.getDirectionalVector());
 
 			if ((temp.getDirectionalVector().getX() > 0 && temp.getCentre().getX() == 900)
-			|| (temp.getDirectionalVector().getX() < 0 && temp.getCentre().getX() == 0)) {
+					|| (temp.getDirectionalVector().getX() < 0 && temp.getCentre().getX() == 0)) {
 				EnemiesList.remove(temp);
 			}
 
 			// see if they get to the top of the screen ( remember 0 is the top
-			// if (temp.getCentre().getY() == 900.0f) // current boundary need to pass value to model
+			// if (temp.getCentre().getY() == 900.0f) // current boundary need to pass value
+			// to model
 			// {
-			// 	EnemiesList.remove(temp);
+			// EnemiesList.remove(temp);
 
-			// 	// enemies win so score decreased
-			// 	Score--;
+			// // enemies win so score decreased
+			// Score--;
 			// }
 		}
 
@@ -126,14 +138,14 @@ public class Model {
 	}
 
 	public GameObject spawnEnemy() {
-        boolean spawnLeft = random.nextBoolean(); // Randomly choose left (true) or right (false)
-        float xPos = spawnLeft ? (float) (Math.random() * 50) : (float) (900 - Math.random() * 50);
-        Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
-        String texture = spawnLeft ? "res/walk_right.png" : "res/walk_left.png";
+		boolean spawnLeft = random.nextBoolean(); // Randomly choose left (true) or right (false)
+		float xPos = spawnLeft ? (float) (Math.random() * 50) : (float) (900 - Math.random() * 50);
+		Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
+		String texture = spawnLeft ? "res/walk_right.png" : "res/walk_left.png";
 
-        return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 50 + 400), 0), direction);
-        //EnemiesList.add(enemy);
-    }
+		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 50 + 400), 0), direction);
+		// EnemiesList.add(enemy);
+	}
 
 	private void bulletLogic() {
 		// TODO Auto-generated method stub
@@ -190,7 +202,7 @@ public class Model {
 			Controller.getInstance().setMousePressed(false);
 		}
 
-		if(Controller.getInstance().getMouseCurrLocation().getY() != Player.getCentre().getY()) {
+		if (Controller.getInstance().getMouseCurrLocation().getY() != Player.getCentre().getY()) {
 			Player.getCentre().setY(Controller.getInstance().getMouseCurrLocation().getY());
 		}
 
