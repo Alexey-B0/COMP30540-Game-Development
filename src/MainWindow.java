@@ -56,11 +56,11 @@ public class MainWindow {
 	 private   JLabel BackgroundImageForStartMenu ;
 	  
 	public MainWindow() {
-	        frame.setSize(1000, 1000);  // you can customise this later and adapt it to change on size.  
+	        frame.setSize(1024, 1024);  // you can customise this later and adapt it to change on size.  
 	      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //If exit // you can modify with your way of quitting , just is a template.
 	        frame.setLayout(null);
 	        frame.add(canvas);  
-	        canvas.setBounds(0, 0, 1000, 1000); 
+	        canvas.setBounds(0, 0, 1024, 1024); 
 			   canvas.setBackground(new Color(255,255,255)); //white background  replaced by Space background but if you remove the background method this will draw a white screen 
 		      canvas.setVisible(false);   // this will become visible after you press the key. 
 		          
@@ -82,7 +82,7 @@ public class MainWindow {
 	        startMenuButton.setBounds(400, 500, 200, 40); 
 	        
 	        //loading background image 
-	        File BackroundToLoad = new File("res/startscreen.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
+	        File BackroundToLoad = new File("res/lakehouse.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
 			try {
 				 
 				 BufferedImage myPicture = ImageIO.read(BackroundToLoad);
@@ -99,6 +99,7 @@ public class MainWindow {
 
 	public static void main(String[] args) {
 		MainWindow hello = new MainWindow();  //sets up environment 
+		boolean lvlTwo = false;
 		while(true)   //not nice but remember we do just want to keep looping till the end.  // this could be replaced by a thread but again we want to keep things simple 
 		{ 
 			//swing has timer class to help us time this but I'm writing my own, you can of course use the timer, but I want to set FPS and display it 
@@ -108,11 +109,22 @@ public class MainWindow {
 			
 			//wait till next time step 
 		 while (FrameCheck > System.currentTimeMillis()){} 
+
+		 if (gameworld.getScore() == 15 && lvlTwo == false) {
+			//startGame = false;
+			lvlTwo = true;
+			gameworld.reset();
+		 }
 			
 			
 			if(startGame)
 				 {
-				 gameloop();
+					if (lvlTwo == false) {
+						gameloop("1");
+					}
+					else {
+						gameloop("2");
+					}
 				 }
 			
 			//UNIT test to see if framerate matches 
@@ -123,7 +135,7 @@ public class MainWindow {
 		
 	} 
 	//Basic Model-View-Controller pattern 
-	private static void gameloop() { 
+	private static void gameloop(String level) { 
 		// GAMELOOP  
 		
 		// controller input  will happen on its own thread 
@@ -137,9 +149,7 @@ public class MainWindow {
 		
 		// Both these calls could be setup as  a thread but we want to simplify the game logic for you.  
 		//score update  
-		 frame.setTitle("Score =  "+ gameworld.getScore()); 
-		
-		 
+		 frame.setTitle("Score =  "+ gameworld.getScore() + " ... Level " + level); 		 
 	}
 
 }

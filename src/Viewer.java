@@ -90,7 +90,7 @@ public class Viewer extends JPanel {
 		String texture = gameworld.getPlayer().getTexture();
 		
 		//Draw background 
-		drawBackground(g);
+		// drawBackground(g);
 		
 		//Draw player
 		drawPlayer(x, y, width, height, texture,g);

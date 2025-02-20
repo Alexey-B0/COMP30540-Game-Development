@@ -108,25 +108,12 @@ public class Model {
 		// TODO Auto-generated method stub
 		for (GameObject temp : EnemiesList) {
 			// Move enemies
-
-			// Point3f towardsPlayer =
-			// Player.getCentre().playerDirectionVector(temp.getCentre());
 			temp.getCentre().ApplyVector(temp.getDirectionalVector());
 
 			if ((temp.getDirectionalVector().getX() > 0 && temp.getCentre().getX() == 900)
 					|| (temp.getDirectionalVector().getX() < 0 && temp.getCentre().getX() == 0)) {
 				EnemiesList.remove(temp);
 			}
-
-			// see if they get to the top of the screen ( remember 0 is the top
-			// if (temp.getCentre().getY() == 900.0f) // current boundary need to pass value
-			// to model
-			// {
-			// EnemiesList.remove(temp);
-
-			// // enemies win so score decreased
-			// Score--;
-			// }
 		}
 
 		if (EnemiesList.size() < 2) {
@@ -189,13 +176,13 @@ public class Model {
 			Player.getCentre().ApplyVector(new Vector3f(2, 0, 0));
 		}
 
-		if (Controller.getInstance().isKeyWPressed()) {
-			Player.getCentre().ApplyVector(new Vector3f(0, 2, 0));
-		}
+		// if (Controller.getInstance().isKeyWPressed()) {
+		// Player.getCentre().ApplyVector(new Vector3f(0, 2, 0));
+		// }
 
-		if (Controller.getInstance().isKeySPressed()) {
-			Player.getCentre().ApplyVector(new Vector3f(0, -2, 0));
-		}
+		// if (Controller.getInstance().isKeySPressed()) {
+		// Player.getCentre().ApplyVector(new Vector3f(0, -2, 0));
+		// }
 
 		if (Controller.getInstance().isMousePressed()) {
 			CreateBullet();
@@ -233,6 +220,37 @@ public class Model {
 
 	public int getScore() {
 		return Score;
+	}
+
+	public void setScore(int newScore) {
+		this.Score = newScore;
+	}
+
+	public void resetScore() {
+		setScore(0);
+	}
+
+	public void reset() {
+		EnemiesList.clear();
+		BulletList.clear();
+		Player.setCentre(new Point3f(500, 500, 0));
+		// setup game world
+		// Player
+		// Enemies starting with four
+
+		EnemiesList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
+				((float) Math.random() * 50 + 400), 0), new Vector3f(-1, 0, 0)));
+
+		EnemiesList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
+				((float) Math.random() * 50 + 500), 0), new Vector3f(-1, 0, 0)));
+
+		EnemiesList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
+				((float) Math.random() * 100 + 500), 0), new Vector3f(1, 0, 0)));
+
+		EnemiesList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
+				((float) Math.random() * 100 + 400), 0), new Vector3f(1, 0, 0)));
+
+		resetScore();
 	}
 
 }
