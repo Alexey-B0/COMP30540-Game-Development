@@ -47,10 +47,19 @@ public class Viewer extends JPanel {
 	private long CurrentAnimationTime= 0; 
 	
 	Model gameworld =new Model(); 
+
+	File TextureToLoad = new File("res/lakehouse.png");
+
+	Image myImage;
 	 
 	public Viewer(Model World) {
 		this.gameworld=World;
-		// TODO Auto-generated constructor stub
+		
+		try {
+			myImage = ImageIO.read(TextureToLoad);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Viewer(LayoutManager layout) {
@@ -90,7 +99,7 @@ public class Viewer extends JPanel {
 		String texture = gameworld.getPlayer().getTexture();
 		
 		//Draw background 
-		// drawBackground(g);
+		drawBackground(g);
 		
 		//Draw player
 		drawPlayer(x, y, width, height, texture,g);
@@ -128,15 +137,7 @@ public class Viewer extends JPanel {
 
 	private void drawBackground(Graphics g)
 	{
-		File TextureToLoad = new File("res/lakehouse.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
-		try {
-			Image myImage = ImageIO.read(TextureToLoad); 
-			 g.drawImage(myImage, 0,0, 1024, 1024, 0 , 0, 1024, 1024, null); 
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		g.drawImage(myImage, 0,0, 1024, 1024, 0 , 0, 1024, 1024, null); 
 	}
 	
 	private void drawBullet(int x, int y, int width, int height, String texture,Graphics g)
