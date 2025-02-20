@@ -44,7 +44,7 @@ public class Model {
 	private int screenHeight = 0;
 
 	private long lastFishSpawnTime = 0;
-	private final long FISH_SPAWN_INTERVAL = 500;
+	private final long FISH_SPAWN_INTERVAL = 0;
 	private final int FISH_SPEED = 5;
 
 	static Random random = new Random();
@@ -112,9 +112,11 @@ public class Model {
 		}
 
 		long now = System.currentTimeMillis();
-		if (FishList.size() < 20 && (now - lastFishSpawnTime) >= FISH_SPAWN_INTERVAL) {
+		if (FishList.size() < 20000 && (now - lastFishSpawnTime) >= FISH_SPAWN_INTERVAL) {
+			for (int i = 0;i<1000;i++){
 				FishList.add(spawnFish());
 				lastFishSpawnTime = now;
+			}
 		}
 	}
 
