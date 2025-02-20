@@ -113,7 +113,7 @@ public class MainWindow {
 		 if (gameworld.getScore() == 15 && lvlTwo == false) {
 			//startGame = false;
 			lvlTwo = true;
-			gameworld.reset();
+			gameworld.setup();
 		 }
 			
 			

@@ -38,27 +38,12 @@ public class Model {
 	private CopyOnWriteArrayList<GameObject> EnemiesList = new CopyOnWriteArrayList<GameObject>();
 	private CopyOnWriteArrayList<GameObject> BulletList = new CopyOnWriteArrayList<GameObject>();
 	private int Score = 0;
+	private int Lives = 3;
 
 	static Random random = new Random();
 
 	public Model() {
-		// setup game world
-		// Player
-		Player = new GameObject("res/itemsfishinga.png", 50, 50, new Point3f(500, 500, 0));
-		// Enemies starting with four
-
-		FishList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
-				((float) Math.random() * 50 + 400), 0), new Vector3f(-1, 0, 0)));
-
-		FishList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
-				((float) Math.random() * 50 + 500), 0), new Vector3f(-1, 0, 0)));
-
-		FishList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
-				((float) Math.random() * 100 + 500), 0), new Vector3f(1, 0, 0)));
-
-		FishList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
-				((float) Math.random() * 100 + 400), 0), new Vector3f(1, 0, 0)));
-
+		setup();
 	}
 
 	// This is the heart of the game , where the model takes in all the inputs
@@ -230,15 +215,23 @@ public class Model {
 		this.Score = newScore;
 	}
 
+	public int getLives() {
+		return Lives;
+	}
+
+	public void setLives(int newLives) {
+		this.Lives = newLives;
+	}
+
 	public void resetScore() {
 		setScore(0);
 	}
 
-	public void reset() {
+	public void setup() {
 		FishList.clear();
 		EnemiesList.clear();
 		BulletList.clear();
-		Player.setCentre(new Point3f(500, 500, 0));
+		Player = new GameObject("res/itemsfishinga.png", 50, 50, new Point3f(500, 500, 0));
 		// setup game world
 		// Player
 		// Enemies starting with four
