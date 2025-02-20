@@ -143,7 +143,7 @@ public class Model {
 		Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
 		String texture = spawnLeft ? "res/walk_right.png" : "res/walk_left.png";
 
-		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 50 + 400), 0), direction);
+		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 500 + 200), 0), direction);
 		// EnemiesList.add(enemy);
 	}
 
