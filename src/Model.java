@@ -34,6 +34,7 @@ public class Model {
 
 	private GameObject Player;
 	private Controller controller = Controller.getInstance();
+	private CopyOnWriteArrayList<GameObject> FishList = new CopyOnWriteArrayList<GameObject>();
 	private CopyOnWriteArrayList<GameObject> EnemiesList = new CopyOnWriteArrayList<GameObject>();
 	private CopyOnWriteArrayList<GameObject> BulletList = new CopyOnWriteArrayList<GameObject>();
 	private int Score = 0;
@@ -46,16 +47,16 @@ public class Model {
 		Player = new GameObject("res/itemsfishinga.png", 50, 50, new Point3f(500, 500, 0));
 		// Enemies starting with four
 
-		EnemiesList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
+		FishList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
 				((float) Math.random() * 50 + 400), 0), new Vector3f(-1, 0, 0)));
 
-		EnemiesList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
+		FishList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
 				((float) Math.random() * 50 + 500), 0), new Vector3f(-1, 0, 0)));
 
-		EnemiesList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
+		FishList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
 				((float) Math.random() * 100 + 500), 0), new Vector3f(1, 0, 0)));
 
-		EnemiesList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
+		FishList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
 				((float) Math.random() * 100 + 400), 0), new Vector3f(1, 0, 0)));
 
 	}
@@ -94,10 +95,10 @@ public class Model {
 		// }
 		// }
 
-		for (GameObject temp : EnemiesList) {
+		for (GameObject temp : FishList) {
 			if (Math.abs(temp.getCentre().getX() - Player.getCentre().getX()) < temp.getWidth()
 					&& Math.abs(temp.getCentre().getY() - Player.getCentre().getY()) < temp.getHeight()) {
-				EnemiesList.remove(temp);
+				FishList.remove(temp);
 				Score++;
 			}
 		}
@@ -106,20 +107,19 @@ public class Model {
 
 	private void enemyLogic() {
 		// TODO Auto-generated method stub
-		for (GameObject temp : EnemiesList) {
+		for (GameObject temp : FishList) {
 			// Move enemies
 			temp.getCentre().ApplyVector(temp.getDirectionalVector());
 
 			if ((temp.getDirectionalVector().getX() > 0 && temp.getCentre().getX() == 900)
 					|| (temp.getDirectionalVector().getX() < 0 && temp.getCentre().getX() == 0)) {
-				EnemiesList.remove(temp);
+				FishList.remove(temp);
 			}
 		}
 
-		if (EnemiesList.size() < 2) {
-			while (EnemiesList.size() < 6) {
-				EnemiesList
-						.add(spawnEnemy());
+		if (FishList.size() < 2) {
+			while (FishList.size() < 6) {
+				FishList.add(spawnEnemy());
 			}
 		}
 	}
@@ -214,6 +214,10 @@ public class Model {
 		return EnemiesList;
 	}
 
+	public CopyOnWriteArrayList<GameObject> getFish() {
+		return FishList;
+	}
+
 	public CopyOnWriteArrayList<GameObject> getBullets() {
 		return BulletList;
 	}
@@ -231,6 +235,7 @@ public class Model {
 	}
 
 	public void reset() {
+		FishList.clear();
 		EnemiesList.clear();
 		BulletList.clear();
 		Player.setCentre(new Point3f(500, 500, 0));
@@ -238,16 +243,16 @@ public class Model {
 		// Player
 		// Enemies starting with four
 
-		EnemiesList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
+		FishList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
 				((float) Math.random() * 50 + 400), 0), new Vector3f(-1, 0, 0)));
 
-		EnemiesList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
+		FishList.add(new GameObject("res/walk_left.png", 50, 50, new Point3f(((float) Math.random() * 50 + 900),
 				((float) Math.random() * 50 + 500), 0), new Vector3f(-1, 0, 0)));
 
-		EnemiesList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
+		FishList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
 				((float) Math.random() * 100 + 500), 0), new Vector3f(1, 0, 0)));
 
-		EnemiesList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
+		FishList.add(new GameObject("res/walk_right.png", 50, 50, new Point3f(((float) Math.random() * 50 - 50),
 				((float) Math.random() * 100 + 400), 0), new Vector3f(1, 0, 0)));
 
 		resetScore();
