@@ -48,7 +48,7 @@ public class Viewer extends JPanel {
 	
 	Model gameworld =new Model(); 
 
-	File TextureToLoad = new File("res/lakehouse.png");
+	File BackroundToLoad = new File("res/lakehouse.png");
 
 	Image myImage;
 	 
@@ -56,7 +56,7 @@ public class Viewer extends JPanel {
 		this.gameworld=World;
 		
 		try {
-			myImage = ImageIO.read(TextureToLoad);
+			myImage = ImageIO.read(BackroundToLoad);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
