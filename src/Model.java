@@ -45,7 +45,9 @@ public class Model {
 
 	private long lastFishSpawnTime = 0;
 	private final long FISH_SPAWN_INTERVAL = 500;
-	private final int FISH_SPEED = 5;
+	private long lastEnemySpawnTime = 0;
+	private final long ENEMY_SPAWN_INTERVAL = 1000;
+	private final int ENTITY_SPEED = 5;
 
 	static Random random = new Random();
 
@@ -60,8 +62,10 @@ public class Model {
 		setScreenHeight((int)size.getHeight());
 		// Player Logic first
 		playerLogic();
-		// Enemy Logic next
+		// fish Logic next
 		fishLogic();
+		// enemy logic next
+		enemyLogic();
 		// Bullets move next
 		bulletLogic();
 		// interactions between objects
@@ -70,25 +74,7 @@ public class Model {
 	}
 
 	private void gameLogic() {
-
-		// this is a way to increment across the array list data structure
-
-		// see if they hit anything
-		// using enhanced for-loop style as it makes it alot easier both code wise and
-		// reading wise too
-		// for (GameObject temp : EnemiesList) {
-		// for (GameObject Bullet : BulletList) {
-		// if (Math.abs(temp.getCentre().getX() - Bullet.getCentre().getX()) <
-		// temp.getWidth()
-		// && Math.abs(temp.getCentre().getY() - Bullet.getCentre().getY()) <
-		// temp.getHeight()) {
-		// EnemiesList.remove(temp);
-		// BulletList.remove(Bullet);
-		// Score++;
-		// }
-		// }
-		// }
-
+		// score counter for fish caught
 		for (GameObject temp : FishList) {
 			if (Math.abs(temp.getCentre().getX() - Player.getCentre().getX()) < temp.getWidth()
 					&& Math.abs(temp.getCentre().getY() - Player.getCentre().getY()) < temp.getHeight()) {
@@ -97,10 +83,18 @@ public class Model {
 			}
 		}
 
+		// life counter for enemy hit
+		for (GameObject temp : EnemiesList) {
+			if (Math.abs(temp.getCentre().getX() - Player.getCentre().getX()) < temp.getWidth()
+					&& Math.abs(temp.getCentre().getY() - Player.getCentre().getY()) < temp.getHeight()) {
+				EnemiesList.remove(temp);
+				Lives--;
+			}
+		}
+
 	}
 
 	private void fishLogic() {
-		// TODO Auto-generated method stub
 		for (GameObject temp : FishList) {
 			// Move enemies
 			temp.getCentre().ApplyVector(temp.getDirectionalVector());
@@ -118,31 +112,41 @@ public class Model {
 		}
 	}
 
-	public GameObject spawnFish() {
+	private GameObject spawnFish() {
 		boolean spawnLeft = random.nextBoolean(); // Randomly choose left (true) or right (false)
 		float xPos = spawnLeft ? (float) (Math.random() * 50) : (float) (getScreenWidth() - Math.random() * 50);
 		Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
-		String texture = spawnLeft ? "res/walk_right.png" : "res/walk_left.png";
+		String texture = spawnLeft ? "res/fish_walk_right.png" : "res/fish_walk_left.png";
 
-		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 400 + 200), 0, getScreenWidth()), direction.byScalar(FISH_SPEED));
+		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 400 + 200), 0, getScreenWidth()), direction.byScalar(ENTITY_SPEED));
+	}
+
+	private void enemyLogic() {
+		for (GameObject enemy : EnemiesList) {
+			enemy.getCentre().ApplyVector(enemy.getDirectionalVector());
+
+			if ((enemy.getDirectionalVector().getX() > 0 && enemy.getCentre().getX() >= 900)
+					|| (enemy.getDirectionalVector().getX() < 0 && enemy.getCentre().getX() <= 0)) {
+				EnemiesList.remove(enemy);
+			}
+		}
+			long now = System.currentTimeMillis();
+			if (EnemiesList.size() < 5 && (now - lastEnemySpawnTime) >= ENEMY_SPAWN_INTERVAL) {
+					EnemiesList.add(spawnEnemy());
+					lastEnemySpawnTime = now;
+			}
+	}
+
+	private GameObject spawnEnemy() {
+		boolean spawnLeft = random.nextBoolean(); // Randomly choose left (true) or right (false)
+		float xPos = spawnLeft ? (float) (Math.random() * 50) : (float) (getScreenWidth() - Math.random() * 50);
+		Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
+		String texture = spawnLeft ? "res/enemy_walk_right.png" : "res/enemy_walk_left.png";
+
+		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 400 + 200), 0, getScreenWidth()), direction.byScalar(1));
 	}
 
 	private void bulletLogic() {
-		// TODO Auto-generated method stub
-		// move bullets
-
-		// for (GameObject temp : BulletList) {
-		// // check to move them
-
-		// temp.getCentre().ApplyVector(new Vector3f(0, 1, 0));
-		// // see if they hit anything
-
-		// // see if they get to the top of the screen ( remember 0 is the top
-		// if (temp.getCentre().getY() == 0) {
-		// BulletList.remove(temp);
-		// }
-		// }
-
 		for (GameObject Bullet : BulletList) {
 			Bullet.getCentre().ApplyVector(Bullet.getDirectionalVector().byScalar(2));
 
@@ -151,7 +155,6 @@ public class Model {
 				BulletList.remove(Bullet);
 			}
 		}
-
 	}
 
 	private void playerLogic() {
@@ -257,6 +260,9 @@ public class Model {
 		BulletList.clear();
 		Player = new GameObject("res/itemsfishinga.png", 50, 50, new Point3f(500, 500, 0));
 		resetScore();
+		if(getLives() < 3) {
+			setLives(Lives + 1);
+		}
 	}
 
 }
