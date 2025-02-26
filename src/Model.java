@@ -164,6 +164,10 @@ public class Model {
 
 		// check for movement and if you fired a bullet
 
+		if (Player.getCentre().getX() != getScreenWidth() / 2) {
+			Player.getCentre().setX(getScreenWidth() / 2);
+		}
+
 		if (Controller.getInstance().isKeyAPressed()) {
 			Player.getCentre().ApplyVector(new Vector3f(-2, 0, 0));
 		}
@@ -258,7 +262,7 @@ public class Model {
 		FishList.clear();
 		EnemiesList.clear();
 		BulletList.clear();
-		Player = new GameObject("res/itemsfishinga.png", 50, 50, new Point3f(500, 500, 0));
+		Player = new GameObject("res/itemsfishinga.png", 50, 50, new Point3f(getScreenWidth() / 2, getScreenHeight() / 2, 0));
 		resetScore();
 		if(getLives() < 3) {
 			setLives(Lives + 1);

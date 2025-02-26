@@ -115,6 +115,16 @@ public class MainWindow {
 			showLevelTransition();
 			lvlTwo = true;
 		 }
+		 else if (gameworld.getScore() == 15 && lvlTwo == true && startGame) {
+			startGame = false;
+			canvas.setVisible(false);
+			endGame("You have won! Congratulations!");
+		 }
+		 else if (gameworld.getLives() <= 0) {
+			startGame = false;
+			canvas.setVisible(false);
+			endGame("You have lost, oopsy!");
+		 }
 			if(startGame)
 				 {
 					if (lvlTwo == false) {
@@ -171,6 +181,39 @@ public class MainWindow {
 		
 		panel.add(message, BorderLayout.CENTER);
 		panel.add(continueButton, BorderLayout.SOUTH);
+		
+		frame.add(panel);
+		frame.revalidate();
+		frame.repaint();
+
+	}
+
+	private static void endGame(String text) {
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		panel.setBounds(300, 400, 400, 200);
+		panel.setBackground(Color.BLACK);
+		
+		JLabel message = new JLabel(text, JLabel.CENTER);
+		message.setForeground(Color.WHITE);
+		
+		JButton exitButton = new JButton("Exit Game");
+		exitButton.addActionListener(e -> {
+			System.exit(0);
+		});
+
+		JButton restartButton = new JButton("Restart game");
+		restartButton.addActionListener(e -> {
+			frame.remove(panel);  // Remove panel
+			frame.repaint();      // Refresh frame
+			gameworld.setup();
+			canvas.setVisible(true);
+			startGame = true;  // Resume game loop
+		});
+		
+		panel.add(message, BorderLayout.CENTER);
+		panel.add(restartButton, BorderLayout.WEST);
+		panel.add(exitButton, BorderLayout.EAST);
 		
 		frame.add(panel);
 		frame.revalidate();
