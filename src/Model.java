@@ -42,6 +42,7 @@ public class Model {
 	private int Lives = 3;
 	private int screenWidth = 0;
 	private int screenHeight = 0;
+	private int gameLevel = 1;
 
 	private long lastFishSpawnTime = 0;
 	private final long FISH_SPAWN_INTERVAL = 500;
@@ -258,6 +259,15 @@ public class Model {
 		this.screenHeight = screenHeight;
 	}
 
+	public int getGameLevel() {
+		return this.gameLevel;
+	}
+
+	public void setGameLevel(int number) {
+		this.gameLevel = number;
+	}
+
+
 	public void setup() {
 		FishList.clear();
 		EnemiesList.clear();
@@ -267,6 +277,13 @@ public class Model {
 		if(getLives() < 3) {
 			setLives(Lives + 1);
 		}
+	}
+
+	public void restartGame() {
+		setup();
+		setScore(0);
+		setLives(3);
+		setGameLevel(1);
 	}
 
 }

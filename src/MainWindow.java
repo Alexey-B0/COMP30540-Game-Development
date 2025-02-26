@@ -52,8 +52,7 @@ public class MainWindow {
 	 private static   Viewer canvas = new  Viewer( gameworld);
 	 private KeyListener KeyController =new Controller();
 	 private static   int TargetFPS = 100;
-	 private static boolean startGame= false; 
-	 private static boolean lvlTwo = false;
+	 private static boolean startGame= false;
 	 private static JLabel BackgroundImageForStartMenu ;
 	 private static File BackroundToLoad = new File("res/lakehouse.png");
 	  
@@ -109,13 +108,13 @@ public class MainWindow {
 			//wait till next time step 
 		 while (FrameCheck > System.currentTimeMillis()){} 
 
-		 if (gameworld.getScore() == 15 && lvlTwo == false && startGame) {
+		 if (gameworld.getScore() == 15 && gameworld.getGameLevel() == 1 && startGame) {
 			startGame = false;
 			canvas.setVisible(false);
 			showLevelTransition();
-			lvlTwo = true;
+			gameworld.setGameLevel(gameworld.getGameLevel() + 1);
 		 }
-		 else if (gameworld.getScore() == 15 && lvlTwo == true && startGame) {
+		 else if (gameworld.getScore() == 15 && gameworld.getGameLevel() == 2 && startGame) {
 			startGame = false;
 			canvas.setVisible(false);
 			endGame("You have won! Congratulations!");
@@ -127,12 +126,7 @@ public class MainWindow {
 		 }
 			if(startGame)
 				 {
-					if (lvlTwo == false) {
-						gameloop("1");
-					}
-					else {
-						gameloop("2");
-					}
+					gameloop(gameworld.getGameLevel());
 				 }
 			
 			//UNIT test to see if framerate matches 
@@ -143,7 +137,7 @@ public class MainWindow {
 		
 	} 
 	//Basic Model-View-Controller pattern 
-	private static void gameloop(String level) { 
+	private static void gameloop(int level) { 
 		// GAMELOOP  
 		
 		// controller input  will happen on its own thread 
@@ -206,7 +200,7 @@ public class MainWindow {
 		restartButton.addActionListener(e -> {
 			frame.remove(panel);  // Remove panel
 			frame.repaint();      // Refresh frame
-			gameworld.setup();
+			gameworld.restartGame();
 			canvas.setVisible(true);
 			startGame = true;  // Resume game loop
 		});
