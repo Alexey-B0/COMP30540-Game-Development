@@ -53,7 +53,9 @@ public class MainWindow {
 	 private KeyListener KeyController =new Controller();
 	 private static   int TargetFPS = 100;
 	 private static boolean startGame= false; 
-	 private   JLabel BackgroundImageForStartMenu ;
+	 private static boolean lvlTwo = false;
+	 private static JLabel BackgroundImageForStartMenu ;
+	 private static File BackroundToLoad = new File("res/lakehouse.png");
 	  
 	public MainWindow() {
 	        frame.setSize(1024, 1024);  // you can customise this later and adapt it to change on size.  
@@ -80,9 +82,7 @@ public class MainWindow {
 					startGame=true;
 				}});  
 	        startMenuButton.setBounds(400, 500, 200, 40); 
-	        
-	        //loading background image 
-	        File BackroundToLoad = new File("res/lakehouse.png");  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
+
 			try {
 				 
 				 BufferedImage myPicture = ImageIO.read(BackroundToLoad);
@@ -99,7 +99,6 @@ public class MainWindow {
 
 	public static void main(String[] args) {
 		MainWindow hello = new MainWindow();  //sets up environment 
-		boolean lvlTwo = false;
 		while(true)   //not nice but remember we do just want to keep looping till the end.  // this could be replaced by a thread but again we want to keep things simple 
 		{ 
 			//swing has timer class to help us time this but I'm writing my own, you can of course use the timer, but I want to set FPS and display it 
@@ -110,13 +109,12 @@ public class MainWindow {
 			//wait till next time step 
 		 while (FrameCheck > System.currentTimeMillis()){} 
 
-		 if (gameworld.getScore() == 15 && lvlTwo == false) {
-			//startGame = false;
+		 if (gameworld.getScore() == 15 && lvlTwo == false && startGame) {
+			startGame = false;
+			canvas.setVisible(false);
+			showLevelTransition();
 			lvlTwo = true;
-			gameworld.setup();
 		 }
-			
-			
 			if(startGame)
 				 {
 					if (lvlTwo == false) {
@@ -153,6 +151,32 @@ public class MainWindow {
 		 frame.setTitle("Score =  "+ gameworld.getScore() + " ... Level " + level + " ... Lives = " + gameworld.getLives()); 		 
 	}
 
+	private static void showLevelTransition() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		panel.setBounds(300, 400, 400, 200);
+		panel.setBackground(Color.BLACK);
+		
+		JLabel message = new JLabel("Level 1 Complete! Get ready for Level 2", JLabel.CENTER);
+		message.setForeground(Color.WHITE);
+		
+		JButton continueButton = new JButton("Continue to Level 2");
+		continueButton.addActionListener(e -> {
+			frame.remove(panel);  // Remove panel
+			frame.repaint();      // Refresh frame
+			gameworld.setup();
+			canvas.setVisible(true);
+			startGame = true;  // Resume game loop
+		});
+		
+		panel.add(message, BorderLayout.CENTER);
+		panel.add(continueButton, BorderLayout.SOUTH);
+		
+		frame.add(panel);
+		frame.revalidate();
+		frame.repaint();
+
+	}
 }
 
 /*

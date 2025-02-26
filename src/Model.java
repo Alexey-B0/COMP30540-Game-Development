@@ -99,7 +99,7 @@ public class Model {
 			// Move enemies
 			temp.getCentre().ApplyVector(temp.getDirectionalVector());
 
-			if ((temp.getDirectionalVector().getX() > 0 && temp.getCentre().getX() >= 900)
+			if ((temp.getDirectionalVector().getX() > 0 && temp.getCentre().getX() >= getScreenWidth())
 					|| (temp.getDirectionalVector().getX() < 0 && temp.getCentre().getX() <= 0)) {
 				FishList.remove(temp);
 			}
@@ -114,7 +114,7 @@ public class Model {
 
 	private GameObject spawnFish() {
 		boolean spawnLeft = random.nextBoolean(); // Randomly choose left (true) or right (false)
-		float xPos = spawnLeft ? (float) (Math.random() * 50) : (float) (getScreenWidth() - Math.random() * 50);
+		float xPos = spawnLeft ? (float) (Math.random() - 20) : (float) (getScreenWidth() + Math.random() * 20);
 		Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
 		String texture = spawnLeft ? "res/fish_walk_right.png" : "res/fish_walk_left.png";
 
@@ -125,7 +125,7 @@ public class Model {
 		for (GameObject enemy : EnemiesList) {
 			enemy.getCentre().ApplyVector(enemy.getDirectionalVector());
 
-			if ((enemy.getDirectionalVector().getX() > 0 && enemy.getCentre().getX() >= 900)
+			if ((enemy.getDirectionalVector().getX() > 0 && enemy.getCentre().getX() >= getScreenWidth())
 					|| (enemy.getDirectionalVector().getX() < 0 && enemy.getCentre().getX() <= 0)) {
 				EnemiesList.remove(enemy);
 			}
@@ -139,7 +139,7 @@ public class Model {
 
 	private GameObject spawnEnemy() {
 		boolean spawnLeft = random.nextBoolean(); // Randomly choose left (true) or right (false)
-		float xPos = spawnLeft ? (float) (Math.random() * 50) : (float) (getScreenWidth() - Math.random() * 50);
+		float xPos = spawnLeft ? (float) (Math.random() - 20) : (float) (getScreenWidth() + Math.random() * 20);
 		Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
 		String texture = spawnLeft ? "res/enemy_walk_right.png" : "res/enemy_walk_left.png";
 
@@ -150,8 +150,8 @@ public class Model {
 		for (GameObject Bullet : BulletList) {
 			Bullet.getCentre().ApplyVector(Bullet.getDirectionalVector().byScalar(2));
 
-			if (Bullet.getCentre().getY() == 0 || Bullet.getCentre().getX() == 0
-					|| Bullet.getCentre().getX() == 900 || Bullet.getCentre().getY() >= 600) {
+			if (Bullet.getCentre().getY() <= 0 || Bullet.getCentre().getX() <= 0
+					|| Bullet.getCentre().getX() >= 900 || Bullet.getCentre().getY() >= 600) {
 				BulletList.remove(Bullet);
 			}
 		}
