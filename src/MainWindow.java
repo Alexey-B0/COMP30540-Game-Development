@@ -110,18 +110,15 @@ public class MainWindow {
 
 		 if (gameworld.getScore() == 15 && gameworld.getGameLevel() == 1 && startGame) {
 			startGame = false;
-			canvas.setVisible(false);
 			showLevelTransition();
 			gameworld.setGameLevel(gameworld.getGameLevel() + 1);
 		 }
 		 else if (gameworld.getScore() == 15 && gameworld.getGameLevel() == 2 && startGame) {
 			startGame = false;
-			canvas.setVisible(false);
 			endGame("You have won! Congratulations!");
 		 }
-		 else if (gameworld.getLives() <= 0) {
+		 else if (gameworld.getLives() <= 0 && startGame) {
 			startGame = false;
-			canvas.setVisible(false);
 			endGame("You have lost, oopsy!");
 		 }
 			if(startGame)
@@ -166,10 +163,10 @@ public class MainWindow {
 		
 		JButton continueButton = new JButton("Continue to Level 2");
 		continueButton.addActionListener(e -> {
+			panel.setVisible(false);
 			frame.remove(panel);  // Remove panel
 			frame.repaint();      // Refresh frame
 			gameworld.setup();
-			canvas.setVisible(true);
 			startGame = true;  // Resume game loop
 		});
 		
@@ -180,6 +177,7 @@ public class MainWindow {
 		frame.revalidate();
 		frame.repaint();
 
+		frame.setComponentZOrder(panel, 0);
 	}
 
 	private static void endGame(String text) {
@@ -198,10 +196,10 @@ public class MainWindow {
 
 		JButton restartButton = new JButton("Restart game");
 		restartButton.addActionListener(e -> {
+			panel.setVisible(false);
 			frame.remove(panel);  // Remove panel
 			frame.repaint();      // Refresh frame
 			gameworld.restartGame();
-			canvas.setVisible(true);
 			startGame = true;  // Resume game loop
 		});
 		
@@ -213,6 +211,7 @@ public class MainWindow {
 		frame.revalidate();
 		frame.repaint();
 
+		frame.setComponentZOrder(panel, 0);
 	}
 }
 
