@@ -200,6 +200,10 @@ public class Viewer extends JPanel {
 		
 	// }
 	private void drawPlayer(int x, int y, int width, int height, String texture,Graphics g) { 
+		if (gameworld.getPlayer().isHit() && (CurrentAnimationTime % 10 < 8)) {
+			return;
+		}
+
 		File TextureToLoad = new File(texture);  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
 		try {
 			Image myImage = ImageIO.read(TextureToLoad);

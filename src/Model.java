@@ -6,6 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import util.GameObject;
 import util.Point3f;
 import util.Vector3f;
+import util.PlayerObject;
 
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -33,7 +34,7 @@ SOFTWARE.
  */
 public class Model {
 
-	private GameObject Player;
+	private PlayerObject Player;
 	private Controller controller = Controller.getInstance();
 	private CopyOnWriteArrayList<GameObject> FishList = new CopyOnWriteArrayList<GameObject>();
 	private CopyOnWriteArrayList<GameObject> EnemiesList = new CopyOnWriteArrayList<GameObject>();
@@ -49,6 +50,8 @@ public class Model {
 	private long lastEnemySpawnTime = 0;
 	private final long ENEMY_SPAWN_INTERVAL = 1000;
 	private final int ENTITY_SPEED = 5;
+
+	private final int INVULNERABILITY_TIME = 3000;
 
 	static Random random = new Random();
 
@@ -66,7 +69,9 @@ public class Model {
 		// fish Logic next
 		fishLogic();
 		// enemy logic next
-		enemyLogic();
+		if (gameLevel > 1) {
+			enemyLogic();
+		}
 		// Bullets move next
 		bulletLogic();
 		// interactions between objects
@@ -88,8 +93,12 @@ public class Model {
 		for (GameObject temp : EnemiesList) {
 			if (Math.abs(temp.getCentre().getX() - Player.getCentre().getX()) < temp.getWidth()
 					&& Math.abs(temp.getCentre().getY() - Player.getCentre().getY()) < temp.getHeight()) {
-				EnemiesList.remove(temp);
-				Lives--;
+				//EnemiesList.remove(temp);
+				if (!Player.isHit()) {
+					Player.setHit(true);
+					Player.setTimeOfHit(System.currentTimeMillis());
+					Lives--;
+				}
 			}
 		}
 
@@ -159,6 +168,9 @@ public class Model {
 	}
 
 	private void playerLogic() {
+		if (Player.isHit() && System.currentTimeMillis() - Player.getTimeOfHit() >= INVULNERABILITY_TIME) {
+			Player.setHit(false);
+		}
 
 		// smoother animation is possible if we make a target position // done but may
 		// try to change things for students
@@ -207,7 +219,7 @@ public class Model {
 		BulletList.add(Bullet);
 	}
 
-	public GameObject getPlayer() {
+	public PlayerObject getPlayer() {
 		return Player;
 	}
 
@@ -272,7 +284,7 @@ public class Model {
 		FishList.clear();
 		EnemiesList.clear();
 		BulletList.clear();
-		Player = new GameObject("res/itemsfishinga.png", 50, 50, new Point3f(getScreenWidth() / 2, getScreenHeight() / 2, 0));
+		Player = new PlayerObject("res/itemsfishinga.png", 50, 50, new Point3f(getScreenWidth() / 2, getScreenHeight() / 2, 0));
 		resetScore();
 		if(getLives() < 3) {
 			setLives(Lives + 1);
