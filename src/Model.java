@@ -7,6 +7,7 @@ import util.GameObject;
 import util.Point3f;
 import util.Vector3f;
 import util.PlayerObject;
+import util.Controls;
 
 /*
  * Created by Abraham Campbell on 15/01/2020.
@@ -33,6 +34,16 @@ SOFTWARE.
    (MIT LICENSE ) e.g do what you want with this :-) 
  */
 public class Model {
+	
+	private Controls controlType;
+
+	public Controls getControlType() {
+		return controlType;
+	}
+
+	public void setControlType(Controls controlType) {
+		this.controlType = controlType;
+	}
 
 	private PlayerObject Player;
 	private Controller controller = Controller.getInstance();
@@ -181,31 +192,39 @@ public class Model {
 			Player.getCentre().setX(getScreenWidth() / 2);
 		}
 
-		if (Controller.getInstance().isKeyAPressed()) {
-			Player.getCentre().ApplyVector(new Vector3f(-2, 0, 0));
-		}
-
-		if (Controller.getInstance().isKeyDPressed()) {
-			Player.getCentre().ApplyVector(new Vector3f(2, 0, 0));
-		}
-
-		// if (Controller.getInstance().isKeyWPressed()) {
-		// Player.getCentre().ApplyVector(new Vector3f(0, 2, 0));
+		// if (Controller.getInstance().isKeyAPressed()) {
+		// 	Player.getCentre().ApplyVector(new Vector3f(-2, 0, 0));
 		// }
 
-		// if (Controller.getInstance().isKeySPressed()) {
-		// Player.getCentre().ApplyVector(new Vector3f(0, -2, 0));
+		// if (Controller.getInstance().isKeyDPressed()) {
+		// 	Player.getCentre().ApplyVector(new Vector3f(2, 0, 0));
 		// }
 
-		if (Controller.getInstance().isMousePressed()) {
-			CreateBullet();
-			Controller.getInstance().setMousePressed(false);
+		switch (controlType) {
+			case KEYBOARD:
+			if (Controller.getInstance().isKeyWPressed()) {
+				Player.getCentre().ApplyVector(new Vector3f(0, 2, 0));
+				}
+		
+				if (Controller.getInstance().isKeySPressed()) {
+				Player.getCentre().ApplyVector(new Vector3f(0, -2, 0));
+				}
+				break;
+		
+			case MOUSE:
+			if (Controller.getInstance().getMouseCurrLocation().getY() != Player.getCentre().getY()) {
+				Player.getCentre().setY(Controller.getInstance().getMouseCurrLocation().getY());
+			}
+				break;
+
+			default:
+				break;
 		}
 
-		if (Controller.getInstance().getMouseCurrLocation().getY() != Player.getCentre().getY()) {
-			Player.getCentre().setY(Controller.getInstance().getMouseCurrLocation().getY());
-		}
-
+		// if (Controller.getInstance().isMousePressed()) {
+		// 	CreateBullet();
+		// 	Controller.getInstance().setMousePressed(false);
+		// }
 	}
 
 	private void CreateBullet() {
@@ -284,7 +303,8 @@ public class Model {
 		FishList.clear();
 		EnemiesList.clear();
 		BulletList.clear();
-		Player = new PlayerObject("res/itemsfishinga.png", 50, 50, new Point3f(getScreenWidth() / 2, getScreenHeight() / 2, 0));
+		Player = new PlayerObject("res/itemsfishinga.png", 50, 50,
+				new Point3f(getScreenWidth() == 0 ? 500 : getScreenWidth() / 2, getScreenHeight() == 0 ? 300 : getScreenHeight() / 2, 0));
 		resetScore();
 		if(getLives() < 3) {
 			setLives(Lives + 1);

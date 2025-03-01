@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import util.Controls;
 import util.UnitTests;
 
 /*
@@ -65,22 +66,40 @@ public class MainWindow {
 			   canvas.setBackground(new Color(255,255,255)); //white background  replaced by Space background but if you remove the background method this will draw a white screen 
 		      canvas.setVisible(false);   // this will become visible after you press the key. 
 		          
+			  JButton startMenuButton = new JButton("Start Game");  // start button 
+			  frame.add(startMenuButton); 
+			  JButton mouseOption = new JButton("Mouse controls");
+			  JButton keyboardOption = new JButton("Keyboard controls");
+			  mouseOption.addActionListener(new ActionListener() {
+				  @Override
+				  public void actionPerformed(ActionEvent e) {
+					mouseOption.setVisible(false);
+					canvas.gameworld.setControlType(Controls.MOUSE);
+					initialiseGame();
+			  }});
+			  mouseOption.setBounds(400, 500, 200, 40);
+	  
+			  keyboardOption.addActionListener(new ActionListener() {
+				  @Override
+				  public void actionPerformed(ActionEvent e) {
+					keyboardOption.setVisible(false);
+					canvas.gameworld.setControlType(Controls.KEYBOARD);
+					initialiseGame();
+			  }});  
+			  keyboardOption.setBounds(400, 550, 200, 40);
 		       
-	        JButton startMenuButton = new JButton("Start Game");  // start button 
 	        startMenuButton.addActionListener(new ActionListener()
 	           { 
 				@Override
 				public void actionPerformed(ActionEvent e) { 
 					startMenuButton.setVisible(false);
-					BackgroundImageForStartMenu.setVisible(false); 
-					canvas.setVisible(true); 
-					canvas.addKeyListener(KeyController);    //adding the controller to the Canvas
-					canvas.addMouseListener((MouseListener) KeyController);
-					canvas.addMouseMotionListener((MouseMotionListener) KeyController);
-	            canvas.requestFocusInWindow();   // making sure that the Canvas is in focus so keyboard input will be taking in .
-					startGame=true;
+					frame.add(mouseOption);
+					frame.add(keyboardOption);
+
+					frame.revalidate();
+					frame.repaint();
 				}});  
-	        startMenuButton.setBounds(400, 500, 200, 40); 
+	        startMenuButton.setBounds(400, 500, 200, 40);
 
 			try {
 				 
@@ -92,8 +111,18 @@ public class MainWindow {
 				e.printStackTrace();
 			}   
 			 
-	         frame.add(startMenuButton);  
 	       frame.setVisible(true);   
+	}
+
+
+	private void initialiseGame() {
+		BackgroundImageForStartMenu.setVisible(false); 
+		canvas.setVisible(true); 
+		canvas.addKeyListener(KeyController);    //adding the controller to the Canvas
+		canvas.addMouseListener((MouseListener) KeyController);
+		canvas.addMouseMotionListener((MouseMotionListener) KeyController);
+		canvas.requestFocusInWindow();   // making sure that the Canvas is in focus so keyboard input will be taking in .
+		startGame=true;
 	}
 
 	public static void main(String[] args) {
@@ -162,13 +191,16 @@ public class MainWindow {
 		message.setForeground(Color.WHITE);
 		
 		JButton continueButton = new JButton("Continue to Level 2");
-		continueButton.addActionListener(e -> {
+		continueButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
 			panel.setVisible(false);
 			frame.remove(panel);  // Remove panel
 			frame.repaint();      // Refresh frame
 			gameworld.setup();
+			canvas.requestFocusInWindow();
 			startGame = true;  // Resume game loop
-		});
+		}});
 		
 		panel.add(message, BorderLayout.CENTER);
 		panel.add(continueButton, BorderLayout.SOUTH);
@@ -190,18 +222,23 @@ public class MainWindow {
 		message.setForeground(Color.WHITE);
 		
 		JButton exitButton = new JButton("Exit Game");
-		exitButton.addActionListener(e -> {
+		exitButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
 			System.exit(0);
-		});
+		}});
 
 		JButton restartButton = new JButton("Restart game");
-		restartButton.addActionListener(e -> {
+		restartButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
 			panel.setVisible(false);
 			frame.remove(panel);  // Remove panel
 			frame.repaint();      // Refresh frame
 			gameworld.restartGame();
+			canvas.requestFocusInWindow();
 			startGame = true;  // Resume game loop
-		});
+		}});
 		
 		panel.add(message, BorderLayout.CENTER);
 		panel.add(restartButton, BorderLayout.WEST);
