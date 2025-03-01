@@ -74,6 +74,7 @@ public class MainWindow {
 				  @Override
 				  public void actionPerformed(ActionEvent e) {
 					mouseOption.setVisible(false);
+					keyboardOption.setVisible(false);
 					canvas.gameworld.setControlType(Controls.MOUSE);
 					initialiseGame();
 			  }});
@@ -83,6 +84,7 @@ public class MainWindow {
 				  @Override
 				  public void actionPerformed(ActionEvent e) {
 					keyboardOption.setVisible(false);
+					mouseOption.setVisible(false);
 					canvas.gameworld.setControlType(Controls.KEYBOARD);
 					initialiseGame();
 			  }});  

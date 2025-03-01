@@ -95,8 +95,11 @@ public class Model {
 		for (GameObject temp : FishList) {
 			if (Math.abs(temp.getCentre().getX() - Player.getCentre().getX()) < temp.getWidth()
 					&& Math.abs(temp.getCentre().getY() - Player.getCentre().getY()) < temp.getHeight()) {
-				FishList.remove(temp);
-				Score++;
+				if (!Player.isHit()) {
+					FishList.remove(temp);
+					Score++;
+				}
+				
 			}
 		}
 
