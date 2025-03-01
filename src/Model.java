@@ -1,7 +1,12 @@
 import java.awt.Dimension;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import util.GameObject;
 import util.Point3f;
@@ -56,6 +61,9 @@ public class Model {
 	private int screenHeight = 0;
 	private int gameLevel = 1;
 
+	private Clip fishCaught;
+	private Clip playerHit;
+
 	private long lastFishSpawnTime = 0;
 	private final long FISH_SPAWN_INTERVAL = 500;
 	private long lastEnemySpawnTime = 0;
@@ -98,8 +106,12 @@ public class Model {
 				if (!Player.isHit()) {
 					FishList.remove(temp);
 					Score++;
+					if (fishCaught.isRunning()) {
+						fishCaught.stop();  // Stop the clip if it's still playing
+					}
+					fishCaught.setFramePosition(0); // Rewind to the beginning
+					fishCaught.start();  // Play the sound again
 				}
-				
 			}
 		}
 
@@ -112,6 +124,11 @@ public class Model {
 					Player.setHit(true);
 					Player.setTimeOfHit(System.currentTimeMillis());
 					Lives--;
+					if (playerHit.isRunning()) {
+						playerHit.stop();  // Stop the clip if it's still playing
+					}
+					playerHit.setFramePosition(0); // Rewind to the beginning
+					playerHit.start();  // Play the sound again
 				}
 			}
 		}
@@ -312,6 +329,17 @@ public class Model {
 		if(getLives() < 3) {
 			setLives(Lives + 1);
 		}
+		try {
+			AudioInputStream audioInputStreamFishCaught = AudioSystem.getAudioInputStream(new File("res/audio/Pickup_00.wav").getAbsoluteFile());
+			AudioInputStream audioInputStreamPlayerHit = AudioSystem.getAudioInputStream(new File("res/audio/Hit_02.wav"));
+			fishCaught = AudioSystem.getClip();
+			playerHit = AudioSystem.getClip();
+			fishCaught.open(audioInputStreamFishCaught);
+			playerHit.open(audioInputStreamPlayerHit);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void restartGame() {
@@ -320,7 +348,6 @@ public class Model {
 		setLives(3);
 		setGameLevel(1);
 	}
-
 }
 
 /*

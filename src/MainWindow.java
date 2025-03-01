@@ -11,6 +11,9 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -56,6 +59,7 @@ public class MainWindow {
 	 private static boolean startGame= false;
 	 private static JLabel BackgroundImageForStartMenu ;
 	 private static File BackroundToLoad = new File("res/lakehouse.png");
+	 private static Clip themeMusic;
 	  
 	public MainWindow() {
 	        frame.setSize(1024, 1024);  // you can customise this later and adapt it to change on size.  
@@ -97,6 +101,7 @@ public class MainWindow {
 					startMenuButton.setVisible(false);
 					frame.add(mouseOption);
 					frame.add(keyboardOption);
+					loadThemeMusic();
 
 					frame.revalidate();
 					frame.repaint();
@@ -145,11 +150,15 @@ public class MainWindow {
 			gameworld.setGameLevel(gameworld.getGameLevel() + 1);
 		 }
 		 else if (gameworld.getScore() == 15 && gameworld.getGameLevel() == 2 && startGame) {
+			themeMusic.stop();
 			startGame = false;
+			playWinSound();
 			endGame("You have won! Congratulations!");
 		 }
 		 else if (gameworld.getLives() <= 0 && startGame) {
+			themeMusic.stop();
 			startGame = false;
+			playLoseSound();
 			endGame("You have lost, oopsy!");
 		 }
 			if(startGame)
@@ -240,6 +249,11 @@ public class MainWindow {
 			gameworld.restartGame();
 			canvas.requestFocusInWindow();
 			startGame = true;  // Resume game loop
+			if (themeMusic.isRunning()) {
+				themeMusic.stop();  // Stop the clip if it's still playing
+			}
+			themeMusic.setFramePosition(0); // Rewind to the beginning
+			themeMusic.loop(Clip.LOOP_CONTINUOUSLY);  // Play the sound again
 		}});
 		
 		panel.add(message, BorderLayout.CENTER);
@@ -251,6 +265,39 @@ public class MainWindow {
 		frame.repaint();
 
 		frame.setComponentZOrder(panel, 0);
+	}
+
+	private static void playLoseSound() {
+		try {
+        	AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("res/audio/Jingle_Lose_00.wav").getAbsoluteFile());
+        	Clip clip = AudioSystem.getClip();
+        	clip.open(audioInputStream);
+        	clip.start();
+    } catch (Exception e) {
+        	e.printStackTrace();
+    }
+	}
+
+	private static void playWinSound() {
+		try {
+        	AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("res/audio/Jingle_Win_00.wav").getAbsoluteFile());
+        	Clip clip = AudioSystem.getClip();
+        	clip.open(audioInputStream);
+        	clip.start();
+    } catch (Exception e) {
+        	e.printStackTrace();
+    }
+	}
+
+	private void loadThemeMusic() {
+		try {
+        	AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("res/audio/Adventure.wav").getAbsoluteFile());
+        	themeMusic = AudioSystem.getClip();
+        	themeMusic.open(audioInputStream);
+        	themeMusic.loop(Clip.LOOP_CONTINUOUSLY);
+    } catch (Exception e) {
+        	e.printStackTrace();
+    }
 	}
 }
 
