@@ -48,7 +48,7 @@ public class Viewer extends JPanel {
 	
 	Model gameworld =new Model(); 
 
-	File BackroundToLoad = new File("res/lakehouse.png");
+	File BackroundToLoad = new File("res/2_game_background.png");
 	File fishSpriteRight = new File("res/fish_walk_right.png");
 	File fishSpriteLeft = new File("res/fish_walk_left.png");
 
@@ -154,7 +154,7 @@ public class Viewer extends JPanel {
 
 	private void drawBackground(Graphics g)
 	{
-		g.drawImage(myBackground, 0,0, this.getWidth(), this.getHeight(), 0 , 0, 1024, 1024, null); 
+		g.drawImage(myBackground, 0,0, this.getWidth(), this.getHeight(), 0 , 0, 1920, 1080, null); 
 	}
 		
 	private void drawPlayer(int x, int y, int width, int height, String texture,Graphics g) { 

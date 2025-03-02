@@ -235,8 +235,8 @@ public class MainWindow {
 			System.exit(0);
 		}});
 
-		JButton endlessMode = new JButton("Endless mode");
-		endlessMode.addActionListener(new ActionListener() {
+		JButton endlessModeButton = new JButton("Endless mode");
+		endlessModeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			endlessGame = true;
@@ -265,7 +265,7 @@ public class MainWindow {
 		panel.add(message, BorderLayout.CENTER);
 		panel.add(restartButton, BorderLayout.WEST);
 		if(gameworld.getGameLevel() == 3) {
-			panel.add(endlessMode, BorderLayout.SOUTH);	
+			panel.add(endlessModeButton, BorderLayout.SOUTH);	
 		}
 		panel.add(exitButton, BorderLayout.EAST);
 		panel.setVisible(true);
