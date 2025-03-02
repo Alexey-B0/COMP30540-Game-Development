@@ -152,6 +152,7 @@ public class MainWindow {
 		 else if (gameworld.getScore() == 15 && gameworld.getGameLevel() == 2 && startGame) {
 			themeMusic.stop();
 			startGame = false;
+			gameworld.setGameLevel(3);
 			playWinSound();
 			endGame("You have won! Congratulations!");
 		 }
@@ -239,6 +240,24 @@ public class MainWindow {
 			System.exit(0);
 		}});
 
+		JButton endlessMode = new JButton("Endless mode");
+		endlessMode.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			panel.setVisible(false);
+			frame.remove(panel);  // Remove panel
+			frame.repaint();      // Refresh frame
+			gameworld.setup();
+			canvas.requestFocusInWindow();
+			startGame = true;  // Resume game loop
+			if (themeMusic.isRunning()) {
+				themeMusic.stop();  // Stop the clip if it's still playing
+			}
+			themeMusic.setFramePosition(0); // Rewind to the beginning
+			themeMusic.loop(Clip.LOOP_CONTINUOUSLY);  // Play the sound again
+			}
+		});
+
 		JButton restartButton = new JButton("Restart game");
 		restartButton.addActionListener(new ActionListener() {
 			@Override
@@ -258,7 +277,10 @@ public class MainWindow {
 		
 		panel.add(message, BorderLayout.CENTER);
 		panel.add(restartButton, BorderLayout.WEST);
-		panel.add(exitButton, BorderLayout.EAST);
+		if(gameworld.getGameLevel() == 3) {
+			panel.add(exitButton, BorderLayout.EAST);
+		}
+		panel.add(endlessMode, BorderLayout.SOUTH);
 		
 		frame.add(panel);
 		frame.revalidate();

@@ -87,12 +87,10 @@ public class Model {
 		playerLogic();
 		// fish Logic next
 		fishLogic();
-		// enemy logic next
+		// enemy logic next, only after level 1
 		if (gameLevel > 1) {
 			enemyLogic();
 		}
-		// Bullets move next
-		bulletLogic();
 		// interactions between objects
 		gameLogic();
 
@@ -107,10 +105,10 @@ public class Model {
 					FishList.remove(temp);
 					Score++;
 					if (fishCaught.isRunning()) {
-						fishCaught.stop();  // Stop the clip if it's still playing
+						fishCaught.stop();  // if playing stop, as .start() will not work
 					}
-					fishCaught.setFramePosition(0); // Rewind to the beginning
-					fishCaught.start();  // Play the sound again
+					fishCaught.setFramePosition(0); // got to beginning of track
+					fishCaught.start();  // play sound again
 				}
 			}
 		}
@@ -125,10 +123,10 @@ public class Model {
 					Player.setTimeOfHit(System.currentTimeMillis());
 					Lives--;
 					if (playerHit.isRunning()) {
-						playerHit.stop();  // Stop the clip if it's still playing
+						playerHit.stop();  // if playing stop, as .start() will not work
 					}
-					playerHit.setFramePosition(0); // Rewind to the beginning
-					playerHit.start();  // Play the sound again
+					playerHit.setFramePosition(0); // got to beginning of track
+					playerHit.start();  // play sound again
 				}
 			}
 		}
@@ -187,18 +185,21 @@ public class Model {
 		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 400 + 200), 0, getScreenWidth()), direction.byScalar(1));
 	}
 
-	private void bulletLogic() {
-		for (GameObject Bullet : BulletList) {
-			Bullet.getCentre().ApplyVector(Bullet.getDirectionalVector().byScalar(2));
 
-			if (Bullet.getCentre().getY() <= 0 || Bullet.getCentre().getX() <= 0
-					|| Bullet.getCentre().getX() >= 900 || Bullet.getCentre().getY() >= 600) {
-				BulletList.remove(Bullet);
-			}
-		}
-	}
+	// TODO: remove code
+	// private void bulletLogic() {
+	// 	for (GameObject Bullet : BulletList) {
+	// 		Bullet.getCentre().ApplyVector(Bullet.getDirectionalVector().byScalar(2));
+
+	// 		if (Bullet.getCentre().getY() <= 0 || Bullet.getCentre().getX() <= 0
+	// 				|| Bullet.getCentre().getX() >= 900 || Bullet.getCentre().getY() >= 600) {
+	// 			BulletList.remove(Bullet);
+	// 		}
+	// 	}
+	// }
 
 	private void playerLogic() {
+		// checks for player invulnerability
 		if (Player.isHit() && System.currentTimeMillis() - Player.getTimeOfHit() >= INVULNERABILITY_TIME) {
 			Player.setHit(false);
 		}
@@ -211,14 +212,6 @@ public class Model {
 		if (Player.getCentre().getX() != getScreenWidth() / 2) {
 			Player.getCentre().setX(getScreenWidth() / 2);
 		}
-
-		// if (Controller.getInstance().isKeyAPressed()) {
-		// 	Player.getCentre().ApplyVector(new Vector3f(-2, 0, 0));
-		// }
-
-		// if (Controller.getInstance().isKeyDPressed()) {
-		// 	Player.getCentre().ApplyVector(new Vector3f(2, 0, 0));
-		// }
 
 		switch (controlType) {
 			case KEYBOARD:
@@ -240,23 +233,20 @@ public class Model {
 			default:
 				break;
 		}
-
-		// if (Controller.getInstance().isMousePressed()) {
-		// 	CreateBullet();
-		// 	Controller.getInstance().setMousePressed(false);
-		// }
 	}
 
-	private void CreateBullet() {
-		Point3f mousePosition = Controller.getInstance().getMousePosition();
-		Vector3f BulletVector = new Vector3f(mousePosition.getX() - Player.getCentre().getX(),
-				Player.getCentre().getY() - mousePosition.getY(), 0).Normal();
+	// TODO: remove code
 
-		GameObject Bullet = new GameObject("res/Bullet.png", 32, 64,
-				new Point3f(Player.getCentre().getX(), Player.getCentre().getY(), 0.0f), BulletVector);
+	// private void CreateBullet() {
+	// 	Point3f mousePosition = Controller.getInstance().getMousePosition();
+	// 	Vector3f BulletVector = new Vector3f(mousePosition.getX() - Player.getCentre().getX(),
+	// 			Player.getCentre().getY() - mousePosition.getY(), 0).Normal();
 
-		BulletList.add(Bullet);
-	}
+	// 	GameObject Bullet = new GameObject("res/Bullet.png", 32, 64,
+	// 			new Point3f(Player.getCentre().getX(), Player.getCentre().getY(), 0.0f), BulletVector);
+
+	// 	BulletList.add(Bullet);
+	// }
 
 	public PlayerObject getPlayer() {
 		return Player;
