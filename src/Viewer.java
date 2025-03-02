@@ -116,12 +116,6 @@ public class Viewer extends JPanel {
 		
 		//Draw player
 		drawPlayer(x, y, width, height, texture,g);
-		  
-		//TODO: remove code
-		// gameworld.getBullets().forEach((temp) -> 
-		// { 
-		// 	drawBullet((int) temp.getCentre().getX(), (int) temp.getCentre().getY(), (int) temp.getWidth(), (int) temp.getHeight(), temp.getTexture(),g);	 
-		// }); 
 		
 		//Draw Enemies   
 		gameworld.getEnemies().forEach((temp) -> 
@@ -162,21 +156,6 @@ public class Viewer extends JPanel {
 	{
 		g.drawImage(myBackground, 0,0, this.getWidth(), this.getHeight(), 0 , 0, 1024, 1024, null); 
 	}
-
-	// TODO: remove code
-	// private void drawBullet(int x, int y, int width, int height, String texture,Graphics g)
-	// {
-	// 	File TextureToLoad = new File(texture);  //should work okay on OSX and Linux but check if you have issues depending your eclipse install or if your running this without an IDE 
-	// 	try {
-	// 		Image myImage = ImageIO.read(TextureToLoad); 
-	// 		//64 by 128 
-	// 		 g.drawImage(myImage, x,y, x+width, y+height, 0 , 0, 63, 127, null); 
-			
-	// 	} catch (IOException e) {
-	// 		// TODO Auto-generated catch block
-	// 		e.printStackTrace();
-	// 	}
-	// }
 		
 	private void drawPlayer(int x, int y, int width, int height, String texture,Graphics g) { 
 		if (gameworld.getPlayer().isHit() && (CurrentAnimationTime % 10 < 8)) {

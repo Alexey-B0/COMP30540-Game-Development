@@ -72,8 +72,8 @@ public class MainWindow {
 		          
 			  JButton startMenuButton = new JButton("Start Game");  // start button 
 			  frame.add(startMenuButton); 
-			  JButton mouseOption = new JButton("Mouse controls");
-			  JButton keyboardOption = new JButton("Keyboard controls");
+			  JButton mouseOption = new JButton("Mouse controls (easier)");
+			  JButton keyboardOption = new JButton("Keyboard controls (harder)");
 			  mouseOption.addActionListener(new ActionListener() {
 				  @Override
 				  public void actionPerformed(ActionEvent e) {
@@ -101,6 +101,8 @@ public class MainWindow {
 					startMenuButton.setVisible(false);
 					frame.add(mouseOption);
 					frame.add(keyboardOption);
+					mouseOption.requestFocusInWindow();
+					keyboardOption.requestFocusInWindow();
 					loadThemeMusic();
 
 					frame.revalidate();

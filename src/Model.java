@@ -54,7 +54,6 @@ public class Model {
 	private Controller controller = Controller.getInstance();
 	private CopyOnWriteArrayList<GameObject> FishList = new CopyOnWriteArrayList<GameObject>();
 	private CopyOnWriteArrayList<GameObject> EnemiesList = new CopyOnWriteArrayList<GameObject>();
-	private CopyOnWriteArrayList<GameObject> BulletList = new CopyOnWriteArrayList<GameObject>();
 	private int Score = 0;
 	private int Lives = 3;
 	private int screenWidth = 0;
@@ -68,7 +67,8 @@ public class Model {
 	private final long FISH_SPAWN_INTERVAL = 500;
 	private long lastEnemySpawnTime = 0;
 	private final long ENEMY_SPAWN_INTERVAL = 1000;
-	private final int ENTITY_SPEED = 5;
+	private final float FISH_SPEED = 2;
+	private final float ENEMY_SPEED = 1;
 
 	private final int INVULNERABILITY_TIME = 3000;
 
@@ -157,7 +157,7 @@ public class Model {
 		Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
 		String texture = spawnLeft ? "res/fish_walk_right.png" : "res/fish_walk_left.png";
 
-		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 400 + 200), 0, getScreenWidth()), direction.byScalar(ENTITY_SPEED));
+		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 400 + 200), 0, getScreenWidth()), direction.byScalar(FISH_SPEED + (float) Math.random() * gameLevel));
 	}
 
 	private void enemyLogic() {
@@ -170,7 +170,7 @@ public class Model {
 			}
 		}
 			long now = System.currentTimeMillis();
-			if (EnemiesList.size() < 5 && (now - lastEnemySpawnTime) >= ENEMY_SPAWN_INTERVAL) {
+			if (EnemiesList.size() < 8 && (now - lastEnemySpawnTime) >= ENEMY_SPAWN_INTERVAL) {
 					EnemiesList.add(spawnEnemy());
 					lastEnemySpawnTime = now;
 			}
@@ -182,21 +182,8 @@ public class Model {
 		Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
 		String texture = spawnLeft ? "res/enemy_walk_right.png" : "res/enemy_walk_left.png";
 
-		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 400 + 200), 0, getScreenWidth()), direction.byScalar(1));
+		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 400 + 200), 0, getScreenWidth()), direction.byScalar(ENEMY_SPEED + (float) Math.random() * gameLevel));
 	}
-
-
-	// TODO: remove code
-	// private void bulletLogic() {
-	// 	for (GameObject Bullet : BulletList) {
-	// 		Bullet.getCentre().ApplyVector(Bullet.getDirectionalVector().byScalar(2));
-
-	// 		if (Bullet.getCentre().getY() <= 0 || Bullet.getCentre().getX() <= 0
-	// 				|| Bullet.getCentre().getX() >= 900 || Bullet.getCentre().getY() >= 600) {
-	// 			BulletList.remove(Bullet);
-	// 		}
-	// 	}
-	// }
 
 	private void playerLogic() {
 		// checks for player invulnerability
@@ -206,8 +193,6 @@ public class Model {
 
 		// smoother animation is possible if we make a target position // done but may
 		// try to change things for students
-
-		// check for movement and if you fired a bullet
 
 		if (Player.getCentre().getX() != getScreenWidth() / 2) {
 			Player.getCentre().setX(getScreenWidth() / 2);
@@ -235,19 +220,6 @@ public class Model {
 		}
 	}
 
-	// TODO: remove code
-
-	// private void CreateBullet() {
-	// 	Point3f mousePosition = Controller.getInstance().getMousePosition();
-	// 	Vector3f BulletVector = new Vector3f(mousePosition.getX() - Player.getCentre().getX(),
-	// 			Player.getCentre().getY() - mousePosition.getY(), 0).Normal();
-
-	// 	GameObject Bullet = new GameObject("res/Bullet.png", 32, 64,
-	// 			new Point3f(Player.getCentre().getX(), Player.getCentre().getY(), 0.0f), BulletVector);
-
-	// 	BulletList.add(Bullet);
-	// }
-
 	public PlayerObject getPlayer() {
 		return Player;
 	}
@@ -258,10 +230,6 @@ public class Model {
 
 	public CopyOnWriteArrayList<GameObject> getFish() {
 		return FishList;
-	}
-
-	public CopyOnWriteArrayList<GameObject> getBullets() {
-		return BulletList;
 	}
 
 	public int getScore() {
@@ -312,12 +280,14 @@ public class Model {
 	public void setup() {
 		FishList.clear();
 		EnemiesList.clear();
-		BulletList.clear();
 		Player = new PlayerObject("res/itemsfishinga.png", 50, 50,
 				new Point3f(getScreenWidth() == 0 ? 500 : getScreenWidth() / 2, getScreenHeight() == 0 ? 300 : getScreenHeight() / 2, 0));
 		resetScore();
-		if(getLives() < 3) {
+		if (getLives() < 3) {
 			setLives(Lives + 1);
+		}
+		else {
+			setLives(3);
 		}
 		try {
 			AudioInputStream audioInputStreamFishCaught = AudioSystem.getAudioInputStream(new File("res/audio/Pickup_00.wav").getAbsoluteFile());
