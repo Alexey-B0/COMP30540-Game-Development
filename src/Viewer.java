@@ -132,7 +132,7 @@ public class Viewer extends JPanel {
 	}
 	
 	private void drawEnemies(int x, int y, int width, int height, String texture, Graphics g) {
-		int animationSpeed = 10;
+		int animationSpeed = 20;
 			Image myImage = texture == "res/images/enemy_walk_left.png" ? enemyLeft: enemyRight;
 			//The spirte is 32x32 pixel wide and 4 of them are placed together so we need to grab a different one each time 
 			//remember your training :-) computer science everything starts at 0 so 32 pixels gets us to 31  
@@ -143,7 +143,7 @@ public class Viewer extends JPanel {
 	}
 
 	private void drawFish(int x, int y, int width, int height, String texture, Graphics g) {
-			int animationSpeed = 10;
+			int animationSpeed = 20;
 			Image myImage = texture == "res/images/fish_walk_left.png" ? fishLeft: fishRight;
 			//The spirte is 32x32 pixel wide and 4 of them are placed together so we need to grab a different one each time 
 			//remember your training :-) computer science everything starts at 0 so 32 pixels gets us to 31  
