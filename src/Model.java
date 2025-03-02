@@ -148,7 +148,7 @@ public class Model {
 		}
 
 		long now = System.currentTimeMillis();
-		if (FishList.size() < 20 && (now - lastFishSpawnTime) >= FISH_SPAWN_INTERVAL) {
+		if (FishList.size() < 15 && (now - lastFishSpawnTime) >= FISH_SPAWN_INTERVAL) {
 				FishList.add(spawnFish());
 				lastFishSpawnTime = now;
 		}
