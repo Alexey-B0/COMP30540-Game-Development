@@ -135,7 +135,10 @@ public class Model {
 
 	private void fishLogic() {
 		for (GameObject temp : FishList) {
-			// Move enemies
+			if (temp.getCentre().getBoundary() < getScreenWidth()) {
+				temp.getCentre().setBoundary(getScreenWidth());
+			}
+			// Move fish
 			temp.getCentre().ApplyVector(temp.getDirectionalVector());
 
 			if ((temp.getDirectionalVector().getX() > 0 && temp.getCentre().getX() >= getScreenWidth())
@@ -162,6 +165,9 @@ public class Model {
 
 	private void enemyLogic() {
 		for (GameObject enemy : EnemiesList) {
+			if (enemy.getCentre().getBoundary() < getScreenWidth()) {
+				enemy.getCentre().setBoundary(getScreenWidth());
+			}
 			enemy.getCentre().ApplyVector(enemy.getDirectionalVector());
 
 			if ((enemy.getDirectionalVector().getX() > 0 && enemy.getCentre().getX() >= getScreenWidth())

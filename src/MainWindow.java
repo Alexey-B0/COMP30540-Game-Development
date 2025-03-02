@@ -57,9 +57,11 @@ public class MainWindow {
 	 private KeyListener KeyController =new Controller();
 	 private static   int TargetFPS = 100;
 	 private static boolean startGame= false;
+	 private static boolean endlessGame = false;
 	 private static JLabel BackgroundImageForStartMenu ;
 	 private static File BackroundToLoad = new File("res/lakehouse.png");
 	 private static Clip themeMusic;
+	 private static JPanel panel = new JPanel(new BorderLayout());
 	  
 	public MainWindow() {
 	        frame.setSize(1024, 1024);  // you can customise this later and adapt it to change on size.  
@@ -69,6 +71,10 @@ public class MainWindow {
 	        canvas.setBounds(0, 0, 1024, 1024); 
 			   canvas.setBackground(new Color(255,255,255)); //white background  replaced by Space background but if you remove the background method this will draw a white screen 
 		      canvas.setVisible(false);   // this will become visible after you press the key. 
+				panel.setBounds((frame.getWidth()- 400) / 2, (frame.getHeight() - 200) / 2, 400, 200);
+				panel.setBackground(new Color(30, 30, 30, 220));
+				frame.add(panel);
+				panel.setVisible(false);
 		          
 			  JButton startMenuButton = new JButton("Start Game");  // start button 
 			  frame.add(startMenuButton); 
@@ -138,6 +144,7 @@ public class MainWindow {
 		MainWindow hello = new MainWindow();  //sets up environment 
 		while(true)   //not nice but remember we do just want to keep looping till the end.  // this could be replaced by a thread but again we want to keep things simple 
 		{ 
+			panel.setBounds((frame.getWidth()- 400) / 2, (frame.getHeight() - 200) / 2, 400, 200);
 			//swing has timer class to help us time this but I'm writing my own, you can of course use the timer, but I want to set FPS and display it 
 			
 			int TimeBetweenFrames =  1000 / TargetFPS;
@@ -154,15 +161,15 @@ public class MainWindow {
 		 else if (gameworld.getScore() == 15 && gameworld.getGameLevel() == 2 && startGame) {
 			themeMusic.stop();
 			startGame = false;
-			gameworld.setGameLevel(3);
 			playWinSound();
-			endGame("You have won! Congratulations!");
+			gameworld.setGameLevel(3);
+			endGame("<html><center>You have won! Congratulations!");
 		 }
 		 else if (gameworld.getLives() <= 0 && startGame) {
 			themeMusic.stop();
 			startGame = false;
 			playLoseSound();
-			endGame("You have lost, oopsy!");
+			endGame("<html><center>You have lost, oopsy!");
 		 }
 			if(startGame)
 				 {
@@ -189,50 +196,36 @@ public class MainWindow {
 		
 		  canvas.updateview(); 
 		  canvas.setSize(frame.getSize());
-		
 		// Both these calls could be setup as  a thread but we want to simplify the game logic for you.  
 		//score update  
 		 frame.setTitle("Score =  "+ gameworld.getScore() + " ... Level " + level + " ... Lives = " + gameworld.getLives()); 		 
 	}
 
-	private static void showLevelTransition() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
-		panel.setBounds(300, 400, 400, 200);
-		panel.setBackground(Color.BLACK);
-		
-		JLabel message = new JLabel("Level 1 Complete! Get ready for Level 2", JLabel.CENTER);
+	private static void showLevelTransition() {		
+		JLabel message = new JLabel("<html><center>Level 1 Complete! Get ready for Level 2" +
+		"<br>There are now red octupi enemies that will damage you" +
+		"<br>Steer clear of them!</center></html>", JLabel.CENTER);
 		message.setForeground(Color.WHITE);
 		
 		JButton continueButton = new JButton("Continue to Level 2");
 		continueButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			panel.setVisible(false);
-			frame.remove(panel);  // Remove panel
-			frame.repaint();      // Refresh frame
-			gameworld.setup();
-			canvas.requestFocusInWindow();
-			startGame = true;  // Resume game loop
+				buttonEffects(false);
 		}});
 		
 		panel.add(message, BorderLayout.CENTER);
 		panel.add(continueButton, BorderLayout.SOUTH);
-		
-		frame.add(panel);
+		panel.setVisible(true);
+		frame.setComponentZOrder(panel, 0);
+		frame.setComponentZOrder(canvas, 1);
+
 		frame.revalidate();
 		frame.repaint();
-
-		frame.setComponentZOrder(panel, 0);
 	}
 
-	private static void endGame(String text) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
-		panel.setBounds(300, 400, 400, 200);
-		panel.setBackground(Color.BLACK);
-		
-		JLabel message = new JLabel(text, JLabel.CENTER);
+	private static void endGame(String text) {		
+		JLabel message = new JLabel(text + (!endlessGame ? "</center></html>" : "<br>Score: " + gameworld.getScore() + "</center></html>"), JLabel.CENTER);
 		message.setForeground(Color.WHITE);
 		
 		JButton exitButton = new JButton("Exit Game");
@@ -246,12 +239,8 @@ public class MainWindow {
 		endlessMode.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			panel.setVisible(false);
-			frame.remove(panel);  // Remove panel
-			frame.repaint();      // Refresh frame
-			gameworld.setup();
-			canvas.requestFocusInWindow();
-			startGame = true;  // Resume game loop
+			endlessGame = true;
+			buttonEffects(false);
 			if (themeMusic.isRunning()) {
 				themeMusic.stop();  // Stop the clip if it's still playing
 			}
@@ -264,12 +253,8 @@ public class MainWindow {
 		restartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			panel.setVisible(false);
-			frame.remove(panel);  // Remove panel
-			frame.repaint();      // Refresh frame
-			gameworld.restartGame();
-			canvas.requestFocusInWindow();
-			startGame = true;  // Resume game loop
+			endlessGame = false;
+			buttonEffects(true);
 			if (themeMusic.isRunning()) {
 				themeMusic.stop();  // Stop the clip if it's still playing
 			}
@@ -280,15 +265,32 @@ public class MainWindow {
 		panel.add(message, BorderLayout.CENTER);
 		panel.add(restartButton, BorderLayout.WEST);
 		if(gameworld.getGameLevel() == 3) {
-			panel.add(exitButton, BorderLayout.EAST);
+			panel.add(endlessMode, BorderLayout.SOUTH);	
 		}
-		panel.add(endlessMode, BorderLayout.SOUTH);
-		
-		frame.add(panel);
-		frame.revalidate();
-		frame.repaint();
+		panel.add(exitButton, BorderLayout.EAST);
+		panel.setVisible(true);
 
 		frame.setComponentZOrder(panel, 0);
+		frame.setComponentZOrder(canvas, 1);
+		
+		frame.revalidate();
+		frame.repaint();
+	}
+
+	private static void buttonEffects(boolean restart) {
+		frame.setComponentZOrder(panel, 1);
+		frame.setComponentZOrder(canvas, 0);
+		panel.removeAll();
+		panel.setVisible(false);
+		frame.revalidate();
+		frame.repaint();      // Refresh frame
+		if (restart) {
+			gameworld.restartGame();
+		} else {
+			gameworld.setup();
+		}
+		canvas.requestFocusInWindow();
+		startGame = true;  // Resume game loop
 	}
 
 	private static void playLoseSound() {
