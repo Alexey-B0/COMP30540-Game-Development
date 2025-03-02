@@ -176,7 +176,7 @@ public class Model {
 			}
 		}
 			long now = System.currentTimeMillis();
-			if (EnemiesList.size() < 8 && (now - lastEnemySpawnTime) >= ENEMY_SPAWN_INTERVAL) {
+			if (EnemiesList.size() < 10 && (now - lastEnemySpawnTime) >= ENEMY_SPAWN_INTERVAL) {
 					EnemiesList.add(spawnEnemy());
 					lastEnemySpawnTime = now;
 			}

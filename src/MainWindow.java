@@ -68,6 +68,7 @@ public class MainWindow {
 	      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //If exit // you can modify with your way of quitting , just is a template.
 	        frame.setLayout(null);
 	        frame.add(canvas);  
+			frame.setTitle("Catch the Fish, not the calamari!");
 	        canvas.setBounds(0, 0, 1024, 1024); 
 			   canvas.setBackground(new Color(255,255,255)); //white background  replaced by Space background but if you remove the background method this will draw a white screen 
 		      canvas.setVisible(false);   // this will become visible after you press the key. 
