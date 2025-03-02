@@ -48,12 +48,12 @@ public class Viewer extends JPanel {
 	
 	Model gameworld =new Model(); 
 
-	File BackroundToLoad = new File("res/2_game_background.png");
-	File fishSpriteRight = new File("res/fish_walk_right.png");
-	File fishSpriteLeft = new File("res/fish_walk_left.png");
+	File BackroundToLoad = new File("res/images/2_game_background.png");
+	File fishSpriteRight = new File("res/images/fish_walk_right.png");
+	File fishSpriteLeft = new File("res/images/fish_walk_left.png");
 
-	File enemySpriteRight = new File("res/enemy_walk_right.png");
-	File enemySpriteLeft = new File("res/enemy_walk_left.png");
+	File enemySpriteRight = new File("res/images/enemy_walk_right.png");
+	File enemySpriteLeft = new File("res/images/enemy_walk_left.png");
 
 	Image myBackground;
 	Image fishRight;
@@ -133,7 +133,7 @@ public class Viewer extends JPanel {
 	
 	private void drawEnemies(int x, int y, int width, int height, String texture, Graphics g) {
 		int animationSpeed = 10;
-			Image myImage = texture == "res/enemy_walk_left.png" ? enemyLeft: enemyRight;
+			Image myImage = texture == "res/images/enemy_walk_left.png" ? enemyLeft: enemyRight;
 			//The spirte is 32x32 pixel wide and 4 of them are placed together so we need to grab a different one each time 
 			//remember your training :-) computer science everything starts at 0 so 32 pixels gets us to 31  
 			int currentPositionInAnimation= ((int) ((CurrentAnimationTime / animationSpeed) % 6 ) * 48); //slows down animation so every 10 frames we get another frame so every 100ms 
@@ -144,7 +144,7 @@ public class Viewer extends JPanel {
 
 	private void drawFish(int x, int y, int width, int height, String texture, Graphics g) {
 			int animationSpeed = 10;
-			Image myImage = texture == "res/fish_walk_left.png" ? fishLeft: fishRight;
+			Image myImage = texture == "res/images/fish_walk_left.png" ? fishLeft: fishRight;
 			//The spirte is 32x32 pixel wide and 4 of them are placed together so we need to grab a different one each time 
 			//remember your training :-) computer science everything starts at 0 so 32 pixels gets us to 31  
 			int currentPositionInAnimation= ((int) ((CurrentAnimationTime / animationSpeed) % 4) * 48); //slows down animation so every 10 frames we get another frame so every 100ms 

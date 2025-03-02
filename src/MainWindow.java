@@ -59,7 +59,7 @@ public class MainWindow {
 	 private static boolean startGame= false;
 	 private static boolean endlessGame = false;
 	 private static JLabel BackgroundImageForStartMenu ;
-	 private static File BackroundToLoad = new File("res/lakehouse.png");
+	 private static File BackroundToLoad = new File("res/images/lakehouse.png");
 	 private static Clip themeMusic;
 	 private static JPanel panel = new JPanel(new BorderLayout());
 	  
@@ -158,7 +158,7 @@ public class MainWindow {
 			showLevelTransition();
 			gameworld.setGameLevel(gameworld.getGameLevel() + 1);
 		 }
-		 else if (gameworld.getScore() == 15 && gameworld.getGameLevel() == 2 && startGame) {
+		 else if (gameworld.getScore() == 25 && gameworld.getGameLevel() == 2 && startGame) {
 			themeMusic.stop();
 			startGame = false;
 			playWinSound();

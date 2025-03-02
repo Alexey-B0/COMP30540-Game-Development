@@ -158,7 +158,7 @@ public class Model {
 		boolean spawnLeft = random.nextBoolean(); // Randomly choose left (true) or right (false)
 		float xPos = spawnLeft ? (float) (Math.random() - 20) : (float) (getScreenWidth() + Math.random() * 20);
 		Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
-		String texture = spawnLeft ? "res/fish_walk_right.png" : "res/fish_walk_left.png";
+		String texture = spawnLeft ? "res/images/fish_walk_right.png" : "res/images/fish_walk_left.png";
 
 		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 400 + 200), 0, getScreenWidth()), direction.byScalar(FISH_SPEED + (float) Math.random() * gameLevel));
 	}
@@ -186,7 +186,7 @@ public class Model {
 		boolean spawnLeft = random.nextBoolean(); // Randomly choose left (true) or right (false)
 		float xPos = spawnLeft ? (float) (Math.random() - 20) : (float) (getScreenWidth() + Math.random() * 20);
 		Vector3f direction = spawnLeft ? new Vector3f(1, 0, 0) : new Vector3f(-1, 0, 0);
-		String texture = spawnLeft ? "res/enemy_walk_right.png" : "res/enemy_walk_left.png";
+		String texture = spawnLeft ? "res/images/enemy_walk_right.png" : "res/images/enemy_walk_left.png";
 
 		return new GameObject(texture, 50, 50, new Point3f(xPos, ((float) Math.random() * 400 + 200), 0, getScreenWidth()), direction.byScalar(ENEMY_SPEED + (float) Math.random() * gameLevel));
 	}
@@ -286,7 +286,7 @@ public class Model {
 	public void setup() {
 		FishList.clear();
 		EnemiesList.clear();
-		Player = new PlayerObject("res/itemsfishinga.png", 50, 50,
+		Player = new PlayerObject("res/images/itemsfishinga.png", 50, 50,
 				new Point3f(getScreenWidth() == 0 ? 500 : getScreenWidth() / 2, getScreenHeight() == 0 ? 300 : getScreenHeight() / 2, 0));
 		resetScore();
 		if (getLives() < 3) {
